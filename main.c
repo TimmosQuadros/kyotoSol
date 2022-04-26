@@ -27,6 +27,7 @@ Card *CreateCard(char val, char sui, char * col, char * fie, bool vis){
         strcpy(newCard->field,fie);
     }
     newCard->visible = vis;
+    return newCard;
 }
 
 typedef struct deck Deck;
