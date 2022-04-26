@@ -14,6 +14,21 @@ struct card{
     Card *next; //linked list
 };
 
+Card *CreateCard(char val, char sui, char * col, char * fie, bool vis){
+    Card *newCard;
+
+    newCard = (Card *) malloc(sizeof(Card));
+    newCard->value = val;
+    newCard->suit = sui;
+    if(col!=NULL){
+        strcpy(newCard->column,col);
+    }
+    if(fie!=NULL){
+        strcpy(newCard->field,fie);
+    }
+    newCard->visible = vis;
+}
+
 typedef struct deck Deck;
 struct deck{
     Card cards;
@@ -29,7 +44,7 @@ struct field{
     Card cards;
 };
 
-char standardDeck[52][2] =
+const char standardDeck[52][2] =
         {
                 "2H",
                 "3H",
@@ -88,9 +103,22 @@ char standardDeck[52][2] =
 
 
 int main() {
+    char stdDeck[52][2];
+    strncpy(stdDeck,standardDeck,104);
 
-    
+    Card *newCard = NULL;
 
-    printf("Hello, World!\n");
+    newCard = CreateCard('A','S',"C1",NULL,true);
+
+    printf("Successful add of flight %c",newCard->value);
+
+    /*for(int i = 0; i<52; i++){
+        for(int j = 0; j<2; j++){
+            printf("%c ",stdDeck[i][j]);
+        }
+        printf("\n");
+    }*/
+
+    //printf("Hello, World!\n");
     return 0;
 }
