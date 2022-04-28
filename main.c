@@ -163,11 +163,11 @@ int main() {
     char stdDeck[52][2];
     strncpy(stdDeck,standardDeck,104);
     //shuffle(stdDeck,52,2);
-    Card *linked_list = NULL;
-    linked_list = ld("/Users/timmrasmussen/Desktop/cardDeck");
+    Card *deck = NULL;
+    deck = ld("/Users/timmrasmussen/Desktop/cardDeck");
 
     Card *card = NULL;
-    card = linked_list;
+    card = deck;
     while(card!=NULL){
         printf("%c%c\n",card->value,card->suit);
         card = card->next;
