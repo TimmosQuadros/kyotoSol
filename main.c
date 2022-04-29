@@ -345,6 +345,40 @@ printFieldLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *
     printf("\n","");
 }
 
+printFieldLineFaceUp(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7, Field *f){
+    if(c1!=NULL)
+        printf("%c%c\t",c1->value,c1->suit);
+    else
+        printf("\t","");
+    if(c2!=NULL)
+        printf("%c%c\t",c2->value,c2->suit);
+    else
+        printf("\t","");
+    if(c3!=NULL)
+        printf("%c%c\t",c3->value,c3->suit);
+    else
+        printf("\t","");
+    if(c4!=NULL)
+        printf("%c%c\t",c4->value,c4->suit);
+    else
+        printf("\t","");
+    if(c5!=NULL)
+        printf("%c%c\t",c5->value,c5->suit);
+    else
+        printf("\t","");
+    if(c6!=NULL)
+        printf("%c%c\t",c6->value,c6->suit);
+    else
+        printf("\t","");
+    if(c7!=NULL)
+        printf("%c%c\t\t\t",c7->value,c7->suit);
+    else
+        printf("\t","");
+    if(f!=NULL)
+        f->cards.visible ? printf("%c%c\t",f->cards.value,f->cards.suit) : printf("%s\t%s","[]",f->name);
+    printf("\n","");
+}
+
 printLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7){
     if(c1!=NULL)
         c1->visible ? printf("%c%c\t",c1->value,c1->suit) : printf("%s\t","[]");
@@ -377,6 +411,38 @@ printLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7){
     printf("\n","");
 }
 
+printLineFaceUp(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7){
+    if(c1!=NULL)
+        printf("%c%c\t",c1->value,c1->suit);
+    else
+        printf("\t","");
+    if(c2!=NULL)
+        printf("%c%c\t",c2->value,c2->suit);
+    else
+        printf("\t","");
+    if(c3!=NULL)
+        printf("%c%c\t",c3->value,c3->suit);
+    else
+        printf("\t","");
+    if(c4!=NULL)
+        printf("%c%c\t",c4->value,c4->suit);
+    else
+        printf("\t","");
+    if(c5!=NULL)
+        printf("%c%c\t",c5->value,c5->suit);
+    else
+        printf("\t","");
+    if(c6!=NULL)
+        printf("%c%c\t",c6->value,c6->suit);
+    else
+        printf("\t","");
+    if(c7!=NULL)
+        printf("%c%c",c7->value,c7->suit);
+    else
+        printf("\t","");
+    printf("\n","");
+}
+
 bool cardsLeft(Board *board){
     if(&board->c1.cards!=NULL || &board->c2.cards!=NULL || &board->c3.cards!=NULL || &board->c4.cards!=NULL
     || &board->c5.cards!=NULL || &board->c6.cards!=NULL || &board->c7.cards!=NULL || &board->f1.cards!=NULL
@@ -401,15 +467,15 @@ sw(Board *board){
     int i = 1;
     while(tmpC1!=NULL || tmpC2!=NULL || tmpC3!=NULL || tmpC4!=NULL || tmpC5!=NULL || tmpC6!=NULL || tmpC7!=NULL){
         if(i==1){
-            printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF1);
+            printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF1);
         }else if(i==3){
-            printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF2);
+            printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF2);
         }else if(i==5){
-            printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF3);
+            printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF3);
         }else if(i==7){
-            printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF4);
+            printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF4);
         }else{
-            printLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7);
+            printLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7);
         }
         i++;
         if(tmpC1!=NULL)
