@@ -48,12 +48,14 @@ Column * createColumn(Card cards){
 typedef struct field Field;
 struct field{
     Card cards;
+    char name[2];
 };
 
-Field *createField(Card cards){
+Field *createField(Card cards, char name[]){
     Field *newField;
     newField = (Field *) malloc(sizeof(Field));
     newField->cards = cards;
+    strcpy(newField->name,name);
     return newField;
 }
 
@@ -250,10 +252,10 @@ Board * prepareBoard(Card *deck){
     c7->cards.next->next->next->next->next->next->next->next->next->next->next = NULL;
     Card  *emptyCard = NULL;
     emptyCard = CreateCard(NULL,NULL,NULL/*,NULL,NULL*/);
-    f1 = createField(*emptyCard);
-    f2 = createField(*emptyCard);
-    f3 = createField(*emptyCard);
-    f4 = createField(*emptyCard);
+    f1 = createField(*emptyCard,"F1");
+    f2 = createField(*emptyCard,"F2");
+    f3 = createField(*emptyCard,"F3");
+    f4 = createField(*emptyCard,"F4");
 
     board = createBoard(*c1,*c2,*c3,*c4,*c5,*c6,*c7,*f1,*f2,*f3,*f4);
     return board;
@@ -293,13 +295,12 @@ Card * ld(char filename[]){
         }
 
     }
-    prepareBoard(linked_list);
     return linked_list;
 }
 
 printTop(){
     for (int i = 1; i<8; i++){
-        printf("%c%d\t","C",i);
+        printf("%c%d\t",'C',i);
     }
     printf("\n\n");
 }
@@ -310,20 +311,125 @@ printRight(){
     }
 }
 
-sw(Board board){
+printFieldLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7, Field *f){
+    if(c1!=NULL)
+        c1->visible ? printf("%c%c\t",c1->value,c1->suit) : printf("%s\t","[]");
+    else
+        printf("%s\t","[]");
+    if(c2!=NULL)
+        c2->visible ? printf("%c%c\t",c2->value,c2->suit) : printf("%s\t","[]");
+    else
+        printf("%s\t","[]");
+    if(c3!=NULL)
+        c3->visible ? printf("%c%c\t",c3->value,c3->suit) : printf("%s\t","[]");
+    else
+        printf("%s\t","[]");
+    if(c4!=NULL)
+        c4->visible ? printf("%c%c\t",c4->value,c4->suit) : printf("%s\t","[]");
+    else
+        printf("%s\t","[]");
+    if(c5!=NULL)
+        c5->visible ? printf("%c%c\t",c5->value,c5->suit) : printf("%s\t","[]");
+    else
+        printf("%s\t","[]");
+    if(c6!=NULL)
+        c6->visible ? printf("%c%c\t",c6->value,c6->suit) : printf("%s\t","[]");
+    else
+        printf("%s\t","[]");
+    if(c7!=NULL)
+        c7->visible ? printf("%c%c\t\t\t",c7->value,c7->suit) : printf("%s\t\t\t","[]");
+    else
+        printf("%s\t","[]");
+    if(f!=NULL)
+        f->cards.visible ? printf("%c%c\t",f->cards.value,f->cards.suit) : printf("%s\t%s","[]",f->name);
+    printf("\n","");
+}
 
+printLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7){
+    if(c1!=NULL)
+        c1->visible ? printf("%c%c\t",c1->value,c1->suit) : printf("%s\t","[]");
+    else
+        printf("%s\t","[]");
+    if(c2!=NULL)
+        c2->visible ? printf("%c%c\t",c2->value,c2->suit) : printf("%s\t","[]");
+    else
+        printf("%s\t","[]");
+    if(c3!=NULL)
+        c3->visible ? printf("%c%c\t",c3->value,c3->suit) : printf("%s\t","[]");
+    else
+        printf("%s\t","[]");
+    if(c4!=NULL)
+        c4->visible ? printf("%c%c\t",c4->value,c4->suit) : printf("%s\t","[]");
+    else
+        printf("%s\t","[]");
+    if(c5!=NULL)
+        c5->visible ? printf("%c%c\t",c5->value,c5->suit) : printf("%s\t","[]");
+    else
+        printf("%s\t","[]");
+    if(c6!=NULL)
+        c6->visible ? printf("%c%c\t",c6->value,c6->suit) : printf("%s\t","[]");
+    else
+        printf("%s\t","[]");
+    if(c7!=NULL)
+        c7->visible ? printf("%c%c",c7->value,c7->suit) : printf("%s","[]");
+    else
+        printf("%s\t","[]");
+    printf("\n","");
+}
 
-    system("cls"); //Clear the console
+bool cardsLeft(Board *board){
+    if(&board->c1.cards!=NULL || &board->c2.cards!=NULL || &board->c3.cards!=NULL || &board->c4.cards!=NULL
+    || &board->c5.cards!=NULL || &board->c6.cards!=NULL || &board->c7.cards!=NULL || &board->f1.cards!=NULL
+    || &board->f2.cards!=NULL || &board->f3.cards!=NULL || &board->f4.cards!=NULL){
+        return true;
+    }
+    return false;
+}
+
+sw(Board *board){
+     //Clear the console
     printTop();
 
+    Card *tmpC1 = NULL;Card *tmpC2 = NULL;Card *tmpC3 = NULL;Card *tmpC4 = NULL;
+    Card *tmpC5 = NULL;Card *tmpC6 = NULL;Card *tmpC7 = NULL;
+    Card *tmpF1 = NULL;Card *tmpF2 = NULL;Card *tmpF3 = NULL;Card *tmpF4 = NULL;
 
+    tmpC1 = &board->c1.cards;tmpC2 = &board->c2.cards;tmpC3 = &board->c3.cards;tmpC4 = &board->c4.cards;
+    tmpC5 = &board->c5.cards;tmpC6 = &board->c6.cards;tmpC7 = &board->c7.cards;
+    tmpF1 = &board->f1;tmpF2 = &board->f2;tmpF3 = &board->f3;tmpF4 = &board->f4;
 
-    for(int i = 0; i<3; i++){
-
-        for(int j = 0; j<8; j++){
-
+    int i = 1;
+    while(tmpC1!=NULL || tmpC2!=NULL || tmpC3!=NULL || tmpC4!=NULL || tmpC5!=NULL || tmpC6!=NULL || tmpC7!=NULL){
+        if(i==1){
+            printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF1);
+        }else if(i==3){
+            printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF2);
+        }else if(i==5){
+            printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF3);
+        }else if(i==7){
+            printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF4);
+        }else{
+            printLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7);
         }
+        i++;
+        if(tmpC1!=NULL)
+            tmpC1 = tmpC1->next;
+        if(tmpC2!=NULL)
+            tmpC2 = tmpC2->next;
+        if(tmpC3!=NULL)
+            tmpC3 = tmpC3->next;
+        if(tmpC4!=NULL)
+            tmpC4 = tmpC4->next;
+        if(tmpC5!=NULL)
+            tmpC5 = tmpC5->next;
+        if(tmpC6!=NULL)
+            tmpC6 = tmpC6->next;
+        if(tmpC7!=NULL)
+            tmpC7 = tmpC7->next;
     }
+
+    //printLine(tmpC1.next,tmpC2->next,tmpC3->next,tmpC4->next,tmpC5->next,tmpC6->next,tmpC7->next);
+
 }
 
 
@@ -332,8 +438,10 @@ int main() {
     strncpy(stdDeck,standardDeck,104);
     //shuffle(stdDeck,52,2);
     Card *deck = NULL;
+    Board *board = NULL;
     deck = ld("/Users/timmrasmussen/Desktop/cardDeck");
-
+    board = prepareBoard(deck);
+    sw(board);
     /*Card *card = NULL;
     card = deck;
     while(card!=NULL){
