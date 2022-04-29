@@ -315,31 +315,31 @@ printFieldLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *
     if(c1!=NULL)
         c1->visible ? printf("%c%c\t",c1->value,c1->suit) : printf("%s\t","[]");
     else
-        printf("%s\t","[]");
+        printf("\t","");
     if(c2!=NULL)
         c2->visible ? printf("%c%c\t",c2->value,c2->suit) : printf("%s\t","[]");
     else
-        printf("%s\t","[]");
+        printf("\t","");
     if(c3!=NULL)
         c3->visible ? printf("%c%c\t",c3->value,c3->suit) : printf("%s\t","[]");
     else
-        printf("%s\t","[]");
+        printf("\t","");
     if(c4!=NULL)
         c4->visible ? printf("%c%c\t",c4->value,c4->suit) : printf("%s\t","[]");
     else
-        printf("%s\t","[]");
+        printf("\t","");
     if(c5!=NULL)
         c5->visible ? printf("%c%c\t",c5->value,c5->suit) : printf("%s\t","[]");
     else
-        printf("%s\t","[]");
+        printf("\t","");
     if(c6!=NULL)
         c6->visible ? printf("%c%c\t",c6->value,c6->suit) : printf("%s\t","[]");
     else
-        printf("%s\t","[]");
+        printf("\t","");
     if(c7!=NULL)
         c7->visible ? printf("%c%c\t\t\t",c7->value,c7->suit) : printf("%s\t\t\t","[]");
     else
-        printf("%s\t","[]");
+        printf("\t","");
     if(f!=NULL)
         f->cards.visible ? printf("%c%c\t",f->cards.value,f->cards.suit) : printf("%s\t%s","[]",f->name);
     printf("\n","");
@@ -349,31 +349,31 @@ printLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7){
     if(c1!=NULL)
         c1->visible ? printf("%c%c\t",c1->value,c1->suit) : printf("%s\t","[]");
     else
-        printf("%s\t","[]");
+        printf("\t","");
     if(c2!=NULL)
         c2->visible ? printf("%c%c\t",c2->value,c2->suit) : printf("%s\t","[]");
     else
-        printf("%s\t","[]");
+        printf("\t","");
     if(c3!=NULL)
         c3->visible ? printf("%c%c\t",c3->value,c3->suit) : printf("%s\t","[]");
     else
-        printf("%s\t","[]");
+        printf("\t","");
     if(c4!=NULL)
         c4->visible ? printf("%c%c\t",c4->value,c4->suit) : printf("%s\t","[]");
     else
-        printf("%s\t","[]");
+        printf("\t","");
     if(c5!=NULL)
         c5->visible ? printf("%c%c\t",c5->value,c5->suit) : printf("%s\t","[]");
     else
-        printf("%s\t","[]");
+        printf("\t","");
     if(c6!=NULL)
         c6->visible ? printf("%c%c\t",c6->value,c6->suit) : printf("%s\t","[]");
     else
-        printf("%s\t","[]");
+        printf("\t","");
     if(c7!=NULL)
         c7->visible ? printf("%c%c",c7->value,c7->suit) : printf("%s","[]");
     else
-        printf("%s\t","[]");
+        printf("\t","");
     printf("\n","");
 }
 
