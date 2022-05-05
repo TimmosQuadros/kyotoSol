@@ -147,6 +147,48 @@ const char standardDeck[52][2] =
                 "AS"
         };
 
+#define foreach(item, array) \
+    for(int keep = 1, \
+            count = 0,\
+            size = sizeof (array) / sizeof *(array); \
+        keep && count != size; \
+        keep = !keep, count++) \
+      for(item = (array) + count; keep; keep = !keep)
+
+void switchPlace(Card *pCard, Card *pCard1);
+
+void sr(Card * deck, int size){
+    Card * firstCard = deck;
+    Card * prevRandomCard1 = deck;
+    Card * prevRandomCard2 = deck;
+    int upper = size-1;
+    int lower = 0;
+    for (int i = 0; i < size; i++) {
+        int r1 = (rand() % (upper - lower + 1)) + lower;
+        int r2 = (rand() % (upper - lower + 1)) + lower;
+        for(int j = 0; j<r1; j++){
+            prevRandomCard1 = prevRandomCard1->next;
+        }
+        for(int j = 0; j<r2; j++){
+            prevRandomCard2 = prevRandomCard2->next;
+        }
+
+        switchPlace(prevRandomCard1, prevRandomCard2);
+
+        prevRandomCard1 = firstCard;
+        prevRandomCard2 = firstCard;
+    }
+}
+
+void switchPlace(Card *prevRandomCard1, Card *prevRandomCard2) {
+    char suit = prevRandomCard1->suit;
+    char value = prevRandomCard1->value;
+    prevRandomCard1->suit = prevRandomCard2->suit;
+    prevRandomCard1->value = prevRandomCard2->value;
+    prevRandomCard2->suit = suit;
+    prevRandomCard2->value = value;
+}
+
 void shuffle(char arr[52][2], int x_size, int y_size){
 
     srand(10);
@@ -161,6 +203,7 @@ void shuffle(char arr[52][2], int x_size, int y_size){
         arr[i1][0] = t1;
         arr[i1][1] = t2;
     }
+    //toLinkedList();
 }
 
 Board * prepareBoard(Card *deck){
@@ -498,16 +541,58 @@ sw(Board *board){
 
 }
 
+Card * unPrepareBoard(Board * board){
+    Card * deck = NULL;
+    Card * current = NULL;
+    deck = &board->c1.cards;
+    current = &board->c1.cards;
+    while(current->next!=NULL){
+        current = current->next;
+    }
+    current->next = &board->c2.cards;
+    current = current->next;
+    while(current->next!=NULL){
+        current = current->next;
+    }
+    current->next = &board->c3.cards;
+    current = current->next;
+    while(current->next!=NULL){
+        current = current->next;
+    }
+    current->next = &board->c4.cards;
+    current = current->next;
+    while(current->next!=NULL){
+        current = current->next;
+    }
+    current->next = &board->c5.cards;
+    current = current->next;
+    while(current->next!=NULL){
+        current = current->next;
+    }
+    current->next = &board->c6.cards;
+    current = current->next;
+    while(current->next!=NULL){
+        current = current->next;
+    }
+    current->next = &board->c7.cards;
+    current = current->next;
+    return deck;
+}
 
 int main() {
-    char stdDeck[52][2];
-    strncpy(stdDeck,standardDeck,104);
+    //char stdDeck[52][2];
+    //strncpy(stdDeck,standardDeck,104);
     //shuffle(stdDeck,52,2);
     Card *deck = NULL;
     Board *board = NULL;
     deck = ld("/Users/timmrasmussen/Desktop/cardDeck");
     board = prepareBoard(deck);
     sw(board);
+    deck = unPrepareBoard(board);
+    sr(deck,52);
+    board = prepareBoard(deck);
+    sw(board);
+
     /*Card *card = NULL;
     card = deck;
     while(card!=NULL){
