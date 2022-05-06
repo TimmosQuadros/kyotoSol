@@ -588,6 +588,33 @@ Card * unPrepareBoard(Board * board){
     return deck;
 }
 
+// here we save the cards from the current deck into a txt file
+void sd(Deck * deck, char * filename){
+    FILE * fp;
+
+    char temp[100];
+    strcpy(temp, filename);
+
+    strcat(temp, ".txt");
+
+    fp = fopen(temp, "w");
+
+    // int length = getCount(deck);
+    Card * current = & deck->cards;
+
+    while(current != NULL)
+    {
+        fprintf(fp, "%c%c", current->value, current->suit);
+        if(current->next != NULL)
+        {
+            fprintf(fp, "\n");
+        }
+        current = current->next;
+    }
+
+    fclose(fp);
+}
+
 int main() {
     //char stdDeck[52][2];
     //strncpy(stdDeck,standardDeck,104);
@@ -595,6 +622,9 @@ int main() {
     Card *deck = NULL;
     Board *board = NULL;
     deck = ld("cardDeck");
+    
+    sd(deck, "batman");
+
     board = prepareBoard(deck);
     sw(board);
     deck = unPrepareBoard(board);
