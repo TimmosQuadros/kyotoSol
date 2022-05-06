@@ -706,6 +706,7 @@ void gameLoop(Deck * deck)
         else // hard commands
         {
             // hard commands: LD <filename>, SI <split>, SD <filename>, L <filename>, S <filename>
+            // 04 - do command, if any
 
             if(strcmp(userInput[0], "L") == 0 && strcmp(userInput[1], "D") == 0 && strcmp(userInput[2], " ") == 0) // LD <filename>
             {}
@@ -723,9 +724,24 @@ void gameLoop(Deck * deck)
             {}
 
             // <Game Moves> | <from>-><to>  |
+            else if(strstr(userInput, "->"))
+            {
+                //C6:4H->C4:5C
+                //C6:4H->C4
+                //C6:4H->F4
+                //C6->C4:5C
+                //F4->C4:5C
 
-            // 04 - do command, if any
+                //C6->C4
 
+                //C6->F4
+                //F4->C6
+                //F4->F3
+            }
+            else
+            {
+                continue; // reset the game loop
+            }
         }
     }
 }
