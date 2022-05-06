@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 #define MAXCHAR 1000;
 
@@ -308,8 +309,33 @@ Card * ld(char filename[]){
     FILE *fp;
     char row[1000];
     char *token;
+    char filenameTmp[40];
+    bool unixTypeOS = false;
+    /*char cwd[10000];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        printf("Current working dir: %s\n", cwd);
+    } else {
+        perror("getcwd() error");
+        return 1;
+    }*/
+    #ifdef _WIN32 // Includes both 32 bit and 64 bit
+        #ifdef _WIN64
+                printf("Windows 64 bit\n");
+            #else
+                printf("Windows 32 bit\n");
+            #endif
+    #else
+        unixTypeOS = true;
+    #endif
 
-    fp = fopen(filename,"r");
+    if(unixTypeOS){
+        //We need to go up one folder since mac is in the cmake-build-debug folder...
+        strcat(filenameTmp,"../");strcat(filenameTmp, filename);
+        fp = fopen(filenameTmp,"r");
+    }else{
+        fp = fopen(filename,"r");
+    }
+
 
     Card *newCard = NULL;
     Card *previous_card = NULL;
@@ -627,10 +653,10 @@ int main() {
 
     board = prepareBoard(deck);
     sw(board);
-    deck = unPrepareBoard(board);
-    sr(deck,52);
-    board = prepareBoard(deck);
-    sw(board);
+    //deck = unPrepareBoard(board);
+    //sr(deck,52);
+    //board = prepareBoard(deck);
+    //sw(board);
 
 
 
