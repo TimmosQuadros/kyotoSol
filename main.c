@@ -651,8 +651,27 @@ void sd(Deck * deck, char * filename){
 }
 
 // this is the master function
-void gameLoop(Deck * deck)
+void gameLoop()
 {
+    // start values -----------------------------------------
+
+    char commandList[5000][100]; // all the commands we have made
+    int clIndex = 0; // this will be the index of commandList
+
+    Card *deck = NULL;
+    Board *board = NULL;
+    deck = ld("cardDeck");
+
+    sd(deck, "batman");
+
+    board = prepareBoard(deck);
+    sw(board);
+    deck = unPrepareBoard(board);
+    sr(deck,52);
+    board = prepareBoard(deck);
+    sw(board);
+
+
     // the endless game loop
     while(true)
 
@@ -662,6 +681,7 @@ void gameLoop(Deck * deck)
         // 01 - check if the game is done
 
         // 02 - ask for command input
+
         char userInput [100];
 
         printf("input: ");
@@ -675,7 +695,7 @@ void gameLoop(Deck * deck)
             continue; // resets the loop
         }
 
-        // simply commands: SW, SR, QQ, P, Q, U, R | SD
+        // simply commands: SW, SR, QQ, P, Q, U, R | SD, SI
         // is the input only 1 to 2 chars?
         if(strlen(userInput) <=2 && strlen(userInput) > 0)
         {
@@ -695,6 +715,10 @@ void gameLoop(Deck * deck)
             else if(strcmp(userInput, "R") == 0)
             {}
             else if(strcmp(userInput, "SD") == 0) // if the user does not set a filename, use the default
+            {
+                sd(deck, "");
+            }
+            else if(strcmp(userInput, "SI") == 0) // if the user didn't set the second parameter
             {
                 sd(deck, "");
             }
@@ -737,12 +761,28 @@ void gameLoop(Deck * deck)
                 //C6->F4
                 //F4->C6
                 //F4->F3
+
+                // validation 1
+                // check if suit moved to is black (S,C) if the card moved is (H,D)
+                // check if suit moved to is red (H,D) if the card moved is (S,C)
+
+                // validation 2
+                // check if the number moved to, is one higher than the card moved
+
+                // validation 3 - could be moved somewhere else
+                // check if the column is full | this one deck/column is done !
+
             }
             else
             {
                 continue; // reset the game loop
             }
         }
+
+        // if the code have gotten down to here, we can assume that a command have been run
+        // TODO: check if this works
+        strcpy(commandList[clIndex], userInput);
+        clIndex++;
     }
 }
 
