@@ -314,9 +314,9 @@ Card * ld(char filename[]){
     Card *newCard = NULL;
     Card *previous_card = NULL;
     Card *linked_list = NULL;
-    while (feof(fp) != true)
+    while (fgets(row, 1000, fp) != NULL)
     {
-        fgets(row, 1000, fp);
+        // fgets(row, 1000, fp);
         //printf("Row: %s", row);
 
         token = strtok(row, "\n"); //Separator
@@ -585,7 +585,7 @@ int main() {
     //shuffle(stdDeck,52,2);
     Card *deck = NULL;
     Board *board = NULL;
-    deck = ld("/Users/timmrasmussen/Desktop/cardDeck");
+    deck = ld("cardDeck");
     board = prepareBoard(deck);
     sw(board);
     deck = unPrepareBoard(board);
