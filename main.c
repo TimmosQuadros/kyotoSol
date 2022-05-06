@@ -355,6 +355,7 @@ printRight(){
 }
 
 printFieldLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7, Field *f){
+    // region printFieldLine
     if(c1!=NULL)
         c1->visible ? printf("%c%c\t",c1->value,c1->suit) : printf("%s\t","[]");
     else
@@ -386,9 +387,11 @@ printFieldLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *
     if(f!=NULL)
         f->cards.visible ? printf("%c%c\t",f->cards.value,f->cards.suit) : printf("%s\t%s","[]",f->name);
     printf("\n","");
+    // endregion
 }
 
 printFieldLineFaceUp(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7, Field *f){
+    // region printFieldLineFaceUp
     if(c1!=NULL)
         printf("%c%c\t",c1->value,c1->suit);
     else
@@ -420,9 +423,11 @@ printFieldLineFaceUp(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, 
     if(f!=NULL)
         f->cards.visible ? printf("%c%c\t",f->cards.value,f->cards.suit) : printf("%s\t%s","[]",f->name);
     printf("\n","");
+    // endregion
 }
 
 printLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7){
+    // region printLine
     if(c1!=NULL)
         c1->visible ? printf("%c%c\t",c1->value,c1->suit) : printf("%s\t","[]");
     else
@@ -452,9 +457,11 @@ printLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7){
     else
         printf("\t","");
     printf("\n","");
+    // endregion
 }
 
 printLineFaceUp(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7){
+    // region printLineFaceUp
     if(c1!=NULL)
         printf("%c%c\t",c1->value,c1->suit);
     else
@@ -484,6 +491,7 @@ printLineFaceUp(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card 
     else
         printf("\t","");
     printf("\n","");
+    // endregion
 }
 
 bool cardsLeft(Board *board){
@@ -496,7 +504,8 @@ bool cardsLeft(Board *board){
 }
 
 sw(Board *board){
-     //Clear the console
+    // region sw
+    //Clear the console
     printTop();
 
     Card *tmpC1 = NULL;Card *tmpC2 = NULL;Card *tmpC3 = NULL;Card *tmpC4 = NULL;
@@ -538,7 +547,7 @@ sw(Board *board){
     }
 
     //printLine(tmpC1.next,tmpC2->next,tmpC3->next,tmpC4->next,tmpC5->next,tmpC6->next,tmpC7->next);
-
+    // endregion
 }
 
 Card * unPrepareBoard(Board * board){
@@ -592,6 +601,10 @@ int main() {
     sr(deck,52);
     board = prepareBoard(deck);
     sw(board);
+
+
+
+    // region stuff
 
     /*Card *card = NULL;
     card = deck;
@@ -705,8 +718,9 @@ int main() {
     }*/
 
 
-
+    // endregion
     //printf("Hello, World!\n");
+
     return 0;
 }
 
