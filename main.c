@@ -619,11 +619,20 @@ void sd(Deck * deck, char * filename){
     FILE * fp;
 
     char temp[100];
-    strcpy(temp, filename);
 
-    strcat(temp, ".txt");
 
-    fp = fopen(temp, "w");
+    if(strlen(filename) != 0) // did the user set a filename
+    {
+        strcpy(temp, filename);
+
+        strcat(temp, ".txt");
+
+        fp = fopen(temp, "w");
+    }
+    else // there was no filename given by the user
+    {
+        fp = fopen("cards.txt", "w");
+    }
 
     // int length = getCount(deck);
     Card * current = & deck->cards;
@@ -639,6 +648,86 @@ void sd(Deck * deck, char * filename){
     }
 
     fclose(fp);
+}
+
+// this is the master function
+void gameLoop(Deck * deck)
+{
+    // the endless game loop
+    while(true)
+
+    {
+        // 00 - print to the screen / render
+
+        // 01 - check if the game is done
+
+        // 02 - ask for command input
+        char userInput [100];
+
+        printf("input: ");
+        scanf("%100s", &userInput);
+
+        // 03 - validation for input
+
+        // no input
+        if(strlen(userInput) == 0)
+        {
+            continue; // resets the loop
+        }
+
+        // simply commands: SW, SR, QQ, P, Q, U, R | SD
+        // is the input only 1 to 2 chars?
+        if(strlen(userInput) <=2 && strlen(userInput) > 0)
+        {
+            // 04 - do command, if any
+            if(strcmp(userInput, "SW") == 0)
+            {}
+            else if(strcmp(userInput, "SR") == 0)
+            {}
+            else if(strcmp(userInput, "QQ") == 0)
+            {}
+            else if(strcmp(userInput, "P") == 0)
+            {}
+            else if(strcmp(userInput, "Q") == 0)
+            {}
+            else if(strcmp(userInput, "U") == 0)
+            {}
+            else if(strcmp(userInput, "R") == 0)
+            {}
+            else if(strcmp(userInput, "SD") == 0) // if the user does not set a filename, use the default
+            {
+                sd(deck, "");
+            }
+            else
+            {
+                continue; // reset the game loop
+            }
+        }
+        else // hard commands
+        {
+            // hard commands: LD <filename>, SI <split>, SD <filename>, L <filename>, S <filename>
+
+            if(strcmp(userInput[0], "L") == 0 && strcmp(userInput[1], "D") == 0 && strcmp(userInput[2], " ") == 0) // LD <filename>
+            {}
+            else if(strcmp(userInput[0], "S") == 0 && strcmp(userInput[1], "I") == 0 && strcmp(userInput[2], " ") == 0) // SI <split>
+            {}
+            else if(strcmp(userInput[0], "S") == 0 && strcmp(userInput[1], "D") == 0 && strcmp(userInput[2], " ") == 0) // SD <filename>
+            {
+                //TODO: check if there is a better way to do this
+                char * fname = strtok(userInput, " ");
+                sd(deck, fname);
+            }
+            else if(strcmp(userInput[0], "L") == 0 && strcmp(userInput[1], " ") == 0) // L <filename>
+            {}
+            else if(strcmp(userInput[0], "S") == 0 && strcmp(userInput[1], " ") == 0) // S <filename>
+            {}
+
+            // <Game Moves> | <from>-><to>  |
+
+            // 04 - do command, if any
+
+        }
+    }
 }
 
 int main() {
