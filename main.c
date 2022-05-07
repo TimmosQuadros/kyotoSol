@@ -708,25 +708,25 @@ void gameLoop()
         if(strlen(userInput) <=2 && strlen(userInput) > 0)
         {
             // 04 - do command, if any
-            if(strcmp(userInput, "SW") == 0)
+            if(strcmp(userInput, "SW") == 0 && strcmp(phase, "STARTUP") == 0) // #2
             {}
-            else if(strcmp(userInput, "SR") == 0)
+            else if(strcmp(userInput, "SR") == 0 && strcmp(phase, "STARTUP") == 0) // #4
             {}
-            else if(strcmp(userInput, "QQ") == 0)
+            else if(strcmp(userInput, "QQ") == 0 && strcmp(phase, "STARTUP") == 0) // #6
             {}
-            else if(strcmp(userInput, "P") == 0)
+            else if(strcmp(userInput, "P") == 0 && strcmp(phase, "STARTUP") == 0) // #7
             {}
-            else if(strcmp(userInput, "Q") == 0)
+            else if(strcmp(userInput, "Q") == 0) // #8
             {}
-            else if(strcmp(userInput, "U") == 0)
+            else if(strcmp(userInput, "U") == 0) // #10
             {}
-            else if(strcmp(userInput, "R") == 0)
+            else if(strcmp(userInput, "R") == 0) // #11
             {}
-            else if(strcmp(userInput, "SD") == 0) // if the user does not set a filename, use the default
+            else if(strcmp(userInput, "SD") == 0 && strcmp(phase, "STARTUP") == 0) // #5 - if the user does not set a filename, use the default
             {
                 sd(deck, "");
             }
-            else if(strcmp(userInput, "SI") == 0) // if the user didn't set the second parameter
+            else if(strcmp(userInput, "SI") == 0 && strcmp(phase, "STARTUP") == 0) // #3 - if the user didn't set the second parameter
             {
                 sd(deck, "");
             }
@@ -740,23 +740,26 @@ void gameLoop()
             // hard commands: LD <filename>, SI <split>, SD <filename>, L <filename>, S <filename>
             // 04 - do command, if any
 
-            if(strcmp(userInput[0], "L") == 0 && strcmp(userInput[1], "D") == 0 && strcmp(userInput[2], " ") == 0) // LD <filename>
+            if(strcmp(userInput[0], "L") == 0 && strcmp(userInput[1], "D") == 0
+            && strcmp(userInput[2], " ") == 0 && strcmp(phase, "STARTUP") == 0) // #1 - LD <filename>
             {}
-            else if(strcmp(userInput[0], "S") == 0 && strcmp(userInput[1], "I") == 0 && strcmp(userInput[2], " ") == 0) // SI <split>
+            else if(strcmp(userInput[0], "S") == 0 && strcmp(userInput[1], "I") == 0
+            && strcmp(userInput[2], " ") == 0 && strcmp(phase, "STARTUP") == 0) // #3 - SI <split>
             {}
-            else if(strcmp(userInput[0], "S") == 0 && strcmp(userInput[1], "D") == 0 && strcmp(userInput[2], " ") == 0) // SD <filename>
+            else if(strcmp(userInput[0], "S") == 0 && strcmp(userInput[1], "D") == 0
+            && strcmp(userInput[2], " ") == 0  && strcmp(phase, "STARTUP") == 0) // #5 - SD <filename>
             {
                 //TODO: check if there is a better way to do this
                 char * fname = strtok(userInput, " ");
                 sd(deck, fname);
             }
-            else if(strcmp(userInput[0], "L") == 0 && strcmp(userInput[1], " ") == 0) // L <filename>
+            else if(strcmp(userInput[0], "L") == 0 && strcmp(userInput[1], " ") == 0) // #13 - L <filename>
             {}
-            else if(strcmp(userInput[0], "S") == 0 && strcmp(userInput[1], " ") == 0) // S <filename>
+            else if(strcmp(userInput[0], "S") == 0 && strcmp(userInput[1], " ") == 0) // #12 - S <filename>
             {}
 
             // <Game Moves> | <from>-><to>  |
-            else if(strstr(userInput, "->"))
+            else if(strstr(userInput, "->")) // #9
             {
                 //C6:4H->C4:5C
                 //C6:4H->C4
