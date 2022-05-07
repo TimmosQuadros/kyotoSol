@@ -92,6 +92,14 @@ Board * createBoard(Column c1, Column c2, Column c3, Column c4, Column c5, Colum
     return newBoard;
 }
 
+typedef struct savefile Savefile;
+struct savefile{
+    Board board;
+    char moveList[10000][100];
+    char undoList[10000][100];
+    char CommandList[5000][100];
+};
+
 const char standardDeck[52][2] =
         {
                 "2H",
@@ -655,21 +663,62 @@ void sd(Deck * deck, char * filename){
     fclose(fp);
 }
 
+void s(Board * board, char * movelist[], char * undoList[], char * commandList[], char * filename){
+//    FILE * fp;
+//
+//    char temp[100];
+//
+//
+//    if(strlen(filename) != 0) // did the user set a filename
+//    {
+//        strcpy(temp, filename);
+//
+//        strcat(temp, ".txt");
+//
+//        fp = fopen(temp, "w");
+//    }
+//    else // there was no filename given by the user
+//    {
+//        fp = fopen("cards.txt", "w");
+//    }
+//
+//    // int length = getCount(deck);
+//    // Card * current = & deck->cards;
+//
+//    while(current != NULL)
+//    {
+//        fprintf(fp, "%c%c", current->value, current->suit);
+//        if(current->next != NULL)
+//        {
+//            fprintf(fp, "\n");
+//        }
+//        current = current->next;
+//    }
+//
+//    fclose(fp);
+}
+
 // this is the master function
 void gameLoop()
 {
     // start values -----------------------------------------
+    bool running = true;
+
     char message[100]; // the message showed on the screen
     char phase[100]; // the game phase (STARTUP, PLAY, ____)
+    strcpy(phase, "STARTUP");
 
-    char commandList[5000][100]; // all the commands we have made
+    char moveList[1000][100]; // list of all moves made, so we can undo them
+    char undoList[1000][100]; // list of all undo done, we be resat after one new move
+
+    char commandList[1000][100]; // all the commands we have made
     int clIndex = 0; // this will be the index of commandList
 
     Card *deck = NULL;
     Board *board = NULL;
     deck = ld("cardDeck");
 
-    sd(deck, "batman");
+    // sd(deck, "batman");
 
     // TODO: move these functions around
     board = prepareBoard(deck);
@@ -677,11 +726,10 @@ void gameLoop()
     deck = unPrepareBoard(board);
     sr(deck,52);
     board = prepareBoard(deck);
-    sw(board, "SW", "OK");
 
 
     // the endless game loop
-    while(true)
+    while(running)
 
     {
         // 00 - print to the screen / render
@@ -692,7 +740,6 @@ void gameLoop()
 
         char userInput [100];
 
-        printf("input: ");
         scanf("%100s", &userInput);
 
         // 03 - validation for input
@@ -713,7 +760,13 @@ void gameLoop()
             else if(strcmp(userInput, "SR") == 0 && strcmp(phase, "STARTUP") == 0) // #4
             {}
             else if(strcmp(userInput, "QQ") == 0 && strcmp(phase, "STARTUP") == 0) // #6
-            {}
+            {
+                printf("\n");
+                printf("the program has stop and will be killed in 3 seconds");
+                sleep(3);
+                running = false;
+                continue;
+            }
             else if(strcmp(userInput, "P") == 0 && strcmp(phase, "STARTUP") == 0) // #7
             {
                 strcpy(phase, "PLAY");
@@ -757,24 +810,27 @@ void gameLoop()
                 char * fname = strtok(userInput, " ");
                 sd(deck, fname);
             }
-            else if(strcmp(userInput[0], "L") == 0 && strcmp(userInput[1], " ") == 0) // #13 - L <filename>
-            {}
-            else if(strcmp(userInput[0], "S") == 0 && strcmp(userInput[1], " ") == 0) // #12 - S <filename>
-            {}
+            else if(strcmp(userInput[0], "L") == 0 && strcmp(userInput[1], " ") == 0 && strcmp(phase, "STARTUP") == 0) // #13 - L <filename>
+            {
+                // TODO: read the pdf, to check which state we need to be in
+            }
+            else if(strcmp(userInput[0], "S") == 0 && strcmp(userInput[1], " ") == 0 && strcmp(phase, "PLAY") == 0) // #12 - S <filename>
+            {
+                // TODO: read the pdf, to check which state we need to be in
+            }
 
             // <Game Moves> | <from>-><to>  |
             else if(strstr(userInput, "->")) // #9
             {
-                //C6:4H->C4:5C
+
                 //C6:4H->C4
                 //C6:4H->F4
-                //C6->C4:5C
-                //F4->C4:5C
-
                 //C6->C4
 
+                //F4->C4
                 //C6->F4
                 //F4->C6
+
                 //F4->F3
 
                 // validation 1
@@ -805,21 +861,23 @@ int main() {
     //char stdDeck[52][2];
     //strncpy(stdDeck,standardDeck,104);
     //shuffle(stdDeck,52,2);
-    Card *deck = NULL;
-    Board *board = NULL;
-    deck = ld("cardDeck");
+    // Card *deck = NULL;
+    // Board *board = NULL;
+    // deck = ld("cardDeck");
     
     // sd(deck, "batman");
 
-    board = prepareBoard(deck);
-    sw(board, "SW", "OK");
+    // board = prepareBoard(deck);
+    // sw(board, "SW", "OK");
     //deck = unPrepareBoard(board);
     //sr(deck,52);
     //board = prepareBoard(deck);
     //sw(board);
 
-    char testing[100];
-    scanf("%s", testing);
+    // char testing[100];
+    // scanf("%s", testing);
+    printf("Hello, World!\n");
+    gameLoop();
 
     // region stuff
 
@@ -936,7 +994,7 @@ int main() {
 
 
     // endregion
-    //printf("Hello, World!\n");
+
 
     return 0;
 }
