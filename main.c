@@ -715,7 +715,9 @@ void gameLoop()
             else if(strcmp(userInput, "QQ") == 0 && strcmp(phase, "STARTUP") == 0) // #6
             {}
             else if(strcmp(userInput, "P") == 0 && strcmp(phase, "STARTUP") == 0) // #7
-            {}
+            {
+                strcpy(phase, "PLAY");
+            }
             else if(strcmp(userInput, "Q") == 0) // #8
             {}
             else if(strcmp(userInput, "U") == 0) // #10
