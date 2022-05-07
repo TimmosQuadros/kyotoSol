@@ -529,7 +529,7 @@ bool cardsLeft(Board *board){
     return false;
 }
 
-sw(Board *board){
+sw(Board *board, char lastC[], char message[]){
     // region sw
     //Clear the console
     printTop();
@@ -571,6 +571,11 @@ sw(Board *board){
         if(tmpC7!=NULL)
             tmpC7 = tmpC7->next;
     }
+
+    // the 3 bottom lines of the screen
+    printf("LAST Command: %s \n", lastC);
+    printf("Message: %s \n", message);
+    printf("input >  ");
 
     //printLine(tmpC1.next,tmpC2->next,tmpC3->next,tmpC4->next,tmpC5->next,tmpC6->next,tmpC7->next);
     // endregion
@@ -654,6 +659,8 @@ void sd(Deck * deck, char * filename){
 void gameLoop()
 {
     // start values -----------------------------------------
+    char message[100]; // the message showed on the screen
+    char phase[100]; // the game phase (STARTUP, PLAY, ____)
 
     char commandList[5000][100]; // all the commands we have made
     int clIndex = 0; // this will be the index of commandList
@@ -664,12 +671,13 @@ void gameLoop()
 
     sd(deck, "batman");
 
+    // TODO: move these functions around
     board = prepareBoard(deck);
-    sw(board);
+    sw(board, "SW", "OK");
     deck = unPrepareBoard(board);
     sr(deck,52);
     board = prepareBoard(deck);
-    sw(board);
+    sw(board, "SW", "OK");
 
 
     // the endless game loop
@@ -794,16 +802,17 @@ int main() {
     Board *board = NULL;
     deck = ld("cardDeck");
     
-    sd(deck, "batman");
+    // sd(deck, "batman");
 
     board = prepareBoard(deck);
-    sw(board);
+    sw(board, "SW", "OK");
     //deck = unPrepareBoard(board);
     //sr(deck,52);
     //board = prepareBoard(deck);
     //sw(board);
 
-
+    char testing[100];
+    scanf("%s", testing);
 
     // region stuff
 
