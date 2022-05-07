@@ -718,8 +718,10 @@ void gameLoop()
             {
                 strcpy(phase, "PLAY");
             }
-            else if(strcmp(userInput, "Q") == 0) // #8
-            {}
+            else if(strcmp(userInput, "Q") == 0 && strcmp(phase, "PLAY") == 0) // #8
+            {
+                strcpy(phase, "STARTUP");
+            }
             else if(strcmp(userInput, "U") == 0) // #10
             {}
             else if(strcmp(userInput, "R") == 0) // #11
