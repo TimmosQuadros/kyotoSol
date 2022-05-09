@@ -537,7 +537,7 @@ bool cardsLeft(Board *board){
     return false;
 }
 
-sw(Board *board, char lastC[], char message[]){
+sw(Board *board, char lastC[], char message[], bool faceUp){
     // region sw
     //Clear the console
     printTop();
@@ -553,15 +553,35 @@ sw(Board *board, char lastC[], char message[]){
     int i = 1;
     while(tmpC1!=NULL || tmpC2!=NULL || tmpC3!=NULL || tmpC4!=NULL || tmpC5!=NULL || tmpC6!=NULL || tmpC7!=NULL){
         if(i==1){
-            printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF1);
+            if(faceUp){
+                printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF1);
+            }else{
+                printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF1);
+            }
         }else if(i==3){
-            printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF2);
+            if(faceUp){
+                printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF2);
+            }else{
+                printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF2);
+            }
         }else if(i==5){
-            printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF3);
+            if(faceUp){
+                printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF3);
+            }else{
+                printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF3);
+            }
         }else if(i==7){
-            printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF4);
+            if(faceUp){
+                printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF4);
+            }else{
+                printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF4);
+            }
         }else{
-            printLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7);
+            if(faceUp){
+                printLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7);
+            }else{
+                printLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7);
+            }
         }
         i++;
         if(tmpC1!=NULL)
@@ -698,6 +718,457 @@ void s(Board * board, char * movelist[], char * undoList[], char * commandList[]
 //    fclose(fp);
 }
 
+bool checkCardToField(Board * board, char cardFrom[], char fieldTo[]);
+// this is the master yoda function
+Card * getLastCardFromColumn(Board *pBoard, int column);
+
+Card * getLastCardFromColumn(Board *pBoard, int column) {
+    if(column==1){
+        Card *card = &pBoard->c1.cards;
+        while(card!=NULL){
+            if(card->next==NULL){
+                break;
+            }
+            card = card->next;
+        }
+        return card;
+    }else if(column==2){
+        Card *card = &pBoard->c2.cards;
+        while(card!=NULL){
+            if(card->next==NULL){
+                break;
+            }
+            card = card->next;
+        }
+        return card;
+    }else if(column==3){
+        Card *card = &pBoard->c3.cards;
+        while(card!=NULL){
+            if(card->next==NULL){
+                break;
+            }
+            card = card->next;
+        }
+        return card;
+    }else if(column==4){
+        Card *card = &pBoard->c4.cards;
+        while(card!=NULL){
+            if(card->next==NULL){
+                break;
+            }
+            card = card->next;
+        }
+        return card;
+    }else if(column==5){
+        Card *card = &pBoard->c5.cards;
+        while(card!=NULL){
+            if(card->next==NULL){
+                break;
+            }
+            card = card->next;
+        }
+        return card;
+    }else if(column==6){
+        Card *card = &pBoard->c6.cards;
+        while(card!=NULL){
+            if(card->next==NULL){
+                break;
+            }
+            card = card->next;
+        }
+        return card;
+    }else if(column==7){
+        Card *card = &pBoard->c7.cards;
+        while(card!=NULL){
+            if(card->next==NULL){
+                break;
+            }
+            card = card->next;
+        }
+        return card;
+    }
+}
+
+Card * getSecondLastCardFromColumn(Board *pBoard, int column);
+
+Card * getSecondLastCardFromColumn(Board *pBoard, int column) {
+    if(column==1){
+        Card *card = &pBoard->c1.cards;
+        while(card!=NULL){
+            if(card->next->next==NULL){
+                break;
+            }
+            card = card->next;
+        }
+        return card;
+    }else if(column==2){
+        Card *card = &pBoard->c2.cards;
+        while(card!=NULL){
+            if(card->next->next==NULL){
+                break;
+            }
+            card = card->next;
+        }
+        return card;
+    }else if(column==3){
+        Card *card = &pBoard->c3.cards;
+        while(card!=NULL){
+            if(card->next->next==NULL){
+                break;
+            }
+            card = card->next;
+        }
+        return card;
+    }else if(column==4){
+        Card *card = &pBoard->c4.cards;
+        while(card!=NULL){
+            if(card->next->next==NULL){
+                break;
+            }
+            card = card->next;
+        }
+        return card;
+    }else if(column==5){
+        Card *card = &pBoard->c5.cards;
+        while(card!=NULL){
+            if(card->next->next==NULL){
+                break;
+            }
+            card = card->next;
+        }
+        return card;
+    }else if(column==6){
+        Card *card = &pBoard->c6.cards;
+        while(card!=NULL){
+            if(card->next->next==NULL){
+                break;
+            }
+            card = card->next;
+        }
+        return card;
+    }else if(column==7){
+        Card *card = &pBoard->c7.cards;
+        while(card!=NULL){
+            if(card->next->next==NULL){
+                break;
+            }
+            card = card->next;
+        }
+        return card;
+    }
+}
+
+void moveCardToField(Card * card,Card * previousCard,Board * board,char fieldTo);
+
+void moveCardToField(Card * card,Card * previousCard,Board * board,char fieldTo){
+   if(fieldTo=='1'){
+       previousCard->next=NULL;
+       //Last card is always visible
+       previousCard->visible=true;
+
+       //Move card
+       if(board->f1.cards.value==NULL){ //if card is an empty dummy card
+           board->f1.cards = *card;
+       }else{
+           //Reverse linked list for the fields
+           Card *tmp = &board->f1.cards;
+           board->f1.cards = *card;
+           card->next = tmp;
+       }
+   } else if(fieldTo=='2'){
+
+   }else if(fieldTo=='3'){
+
+   }else if(fieldTo=='4'){
+
+   }
+}
+
+isValidMove(char move[6], Board * board){
+    char * from = strtok(move, "->");
+    char * to = strtok(NULL, "->");
+
+    char * columnFrom = strtok(from, ":");
+    char * cardFrom = strtok(NULL, ":");
+    if(strstr(columnFrom,"C")==NULL){
+        cardFrom = columnFrom;
+        columnFrom = NULL;
+    }
+
+    char * fieldFrom = NULL;
+    if(cardFrom!=NULL && strstr(cardFrom,"F")!=NULL){
+        fieldFrom = cardFrom;
+        cardFrom = NULL;
+    }
+
+    char * columnTo = strtok(to, ":");
+    char * cardTo = strtok(NULL, ":");
+    if(strstr(columnTo,"C")==NULL){
+        cardTo = columnTo;
+        columnTo = NULL;
+    }
+
+    char * fieldTo = NULL;
+    if(cardTo!=NULL && strstr(cardTo,"F")!=NULL){
+        fieldTo = cardTo;
+        cardTo = NULL;
+    }
+
+    if(fieldTo!=NULL && fieldFrom==NULL){
+        if(cardFrom!=NULL && columnFrom!=NULL){
+            //column card to field i.e. C1:AS->F1
+            //TODO check if Card can fit in F1
+            int column = (int)columnFrom[1]-48;
+            if(column==1 || column==2 || column==3 || column==4 || column==5 || column==6 || column==7){
+                //check if card is the last card
+                Card *lastCard = getLastCardFromColumn(board, column);
+                if(cardFrom[0]!=lastCard->value || cardFrom[1]!=lastCard->suit){
+                    return false;
+                }
+                if(checkCardToField(board,cardFrom,fieldTo)){
+                    Card *secondLastCard = getSecondLastCardFromColumn(board, column);
+
+                    moveCardToField(lastCard,secondLastCard,board,fieldTo[1]);
+
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        }else if(cardFrom==NULL && columnFrom!=NULL){
+            //column to field i.e. C1->F1
+            int column = (int)columnFrom[1]-48;
+            if(column==1 || column==2 || column==3 || column==4 || column==5 || column==6 || column==7){
+                Card *lastCard = getLastCardFromColumn(board, column);
+                char p[2]={lastCard->value,lastCard->suit};
+                if(checkCardToField(board, p,fieldTo)){
+                    return true;
+                }
+            }
+        }
+    }else if(fieldFrom!=NULL && fieldTo==NULL){
+        if(cardTo!=NULL && columnTo!=NULL){
+            //field to column card i.e. F1->C1:AS
+
+        }else if(cardTo==NULL && columnTo!=NULL){
+            //field to column i.e. F1->C1
+
+        }
+    }else if(fieldFrom!=NULL && fieldTo!=NULL){
+        //Field to Field i.e. F1->F2
+
+    }else if(fieldFrom==NULL && fieldTo==NULL){
+        if(cardFrom==NULL && columnFrom!=NULL){
+            if(cardTo!=NULL && columnTo!=NULL){
+                //column to column-card i.e. C1->C2:JH
+
+            }else if(cardTo==NULL && columnTo!=NULL){
+                //column to column i.e. C1->C2
+
+            }
+        }else if(cardFrom!=NULL && columnFrom!=NULL){
+            if(cardTo!=NULL && columnTo!=NULL){
+                //column-card to column-card i.e. C1:TH->C2:JS
+
+            }else if(cardTo==NULL && columnTo!=NULL){
+                //column-card to column i.e. C1:TH->C2
+
+            }
+        }
+    }else{
+        return false;
+    }
+    return false;
+}
+
+char returnCardValueOneGreater(char value){
+    if(value=='A'){
+        return '2';
+    }else if(value=='2'){
+        return '3';
+    }else if(value=='3'){
+        return '4';
+    }else if(value=='4'){
+        return '5';
+    }else if(value=='5'){
+        return '6';
+    }else if(value=='6'){
+        return '7';
+    }else if(value=='7'){
+        return '8';
+    }else if(value=='8'){
+        return '9';
+    }else if(value=='9'){
+        return 'T';
+    }else if(value=='T'){
+        return 'J';
+    }else if(value=='J'){
+        return 'Q';
+    }else if(value=='Q'){
+        return 'K';
+    }else if(value=='K'){
+        return 'K';
+    }
+}
+
+bool checkCardToField(Board * board, char cardFrom[], char fieldTo[]){
+    //TODO a lot of redundant code maybe fix it one day
+    if(((char)fieldTo[1])=='1'){
+        //Value = null means no cards on field
+        if(board->f1.cards.value==NULL){
+            //Check if card is an ace
+            if(cardFrom[0]=='A'){
+                return true;
+            }
+        }else{
+            //Here it gets difficult first check if suit is the same
+            if(board->f1.cards.suit==(char)cardFrom[1]){
+                //If suit is the same then check if value is one greater
+                if(returnCardValueOneGreater(board->f1.cards.value)==(char)cardFrom[0]){
+                    return true;
+                }
+            }
+        }
+    }else if(((char)fieldTo[1])=='2'){
+        //Value = null means no cards on field
+        if(board->f2.cards.value==NULL){
+            //Check if card is an ace
+            if(cardFrom[0]=='A'){
+                return true;
+            }
+        }else{
+            //Here it gets difficult first check if suit is the same
+            if(board->f2.cards.suit==(char)cardFrom[1]){
+                //If suit is the same then check if value is one greater
+                if(returnCardValueOneGreater(board->f2.cards.value)==(char)cardFrom[0]){
+                    return true;
+                }
+            }
+        }
+    }else if(((char)fieldTo[1])=='3'){
+        //Value = null means no cards on field
+        if(board->f3.cards.value==NULL){
+            //Check if card is an ace
+            if(cardFrom[0]=='A'){
+                return true;
+            }
+        }else{
+            //Here it gets difficult first check if suit is the same
+            if(board->f3.cards.suit==(char)cardFrom[1]){
+                //If suit is the same then check if value is one greater
+                if(returnCardValueOneGreater(board->f3.cards.value)==(char)cardFrom[0]){
+                    return true;
+                }
+            }
+        }
+    }else if(((char)fieldTo[1])=='4'){
+        //Value = null means no cards on field
+        if(board->f4.cards.value==NULL){
+            //Check if card is an ace
+            if(cardFrom[0]=='A'){
+                return true;
+            }
+        }else{
+            //Here it gets difficult first check if suit is the same
+            if(board->f4.cards.suit==(char)cardFrom[1]){
+                //If suit is the same then check if value is one greater
+                if(returnCardValueOneGreater(board->f4.cards.value)==(char)cardFrom[0]){
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+void removeLastCardFromColumn(int column, Board * board){
+    Card * current = NULL;
+    Card * tmp = NULL;
+    if(column==1){
+        current = &board->c1.cards;
+        if(current->next==NULL){
+            current=NULL;
+        }
+        while(current!=NULL){
+            if(current->next->next==NULL){
+                tmp = current->next;
+                current->next=NULL;
+            }
+            current=current->next;
+        }
+    }else if(column==2){
+        current = &board->c2.cards;
+    }else if(column==3){
+        current = &board->c3.cards;
+    }else if(column==4){
+        current = &board->c4.cards;
+    }else if(column==5){
+        current = &board->c5.cards;
+    }else if(column==6){
+        current = &board->c6.cards;
+    }else if(column==7){
+        current = &board->c7.cards;
+    }
+}
+
+Card * findCard(Board * board, char value, char suit){
+    Card * c = &board->c1.cards;
+    while(c!=NULL){
+        if(strcmp(value,c->value)==0 && strcmp(suit,c->suit)==0){
+            return c;
+        }
+        c = c->next;
+    }
+
+    c = &board->c2.cards;
+    while(c!=NULL){
+        if(strcmp(value,c->value)==0 && strcmp(suit,c->suit)==0){
+            return c;
+        }
+        c = c->next;
+    }
+
+    c = &board->c3.cards;
+    while(c!=NULL){
+        if(strcmp(value,c->value)==0 && strcmp(suit,c->suit)==0){
+            return c;
+        }
+        c = c->next;
+    }
+
+    c = &board->c4.cards;
+    while(c!=NULL){
+        if(strcmp(value,c->value)==0 && strcmp(suit,c->suit)==0){
+            return c;
+        }
+        c = c->next;
+    }
+
+    c = &board->c5.cards;
+    while(c!=NULL){
+        if(strcmp(value,c->value)==0 && strcmp(suit,c->suit)==0){
+            return c;
+        }
+        c = c->next;
+    }
+
+    c = &board->c6.cards;
+    while(c!=NULL){
+        if(strcmp(value,c->value)==0 && strcmp(suit,c->suit)==0){
+            return c;
+        }
+        c = c->next;
+    }
+
+    c = &board->c7.cards;
+    while(c!=NULL){
+        if(strcmp(value,c->value)==0 && strcmp(suit,c->suit)==0){
+            return c;
+        }
+        c = c->next;
+    }
+}
+
 // this is the master function
 void gameLoop()
 {
@@ -722,10 +1193,11 @@ void gameLoop()
 
     // TODO: move these functions around
     board = prepareBoard(deck);
-    sw(board, "SW", "OK");
+    sw(board, "SW", "OK",false);
     deck = unPrepareBoard(board);
     sr(deck,52);
     board = prepareBoard(deck);
+    sw(board, "SW", "OK",false);
 
 
     // the endless game loop
@@ -861,14 +1333,16 @@ int main() {
     //char stdDeck[52][2];
     //strncpy(stdDeck,standardDeck,104);
     //shuffle(stdDeck,52,2);
-    // Card *deck = NULL;
-    // Board *board = NULL;
-    // deck = ld("cardDeck");
+    Card *deck = NULL;
+    Board *board = NULL;
+    deck = ld("cardDeck");
     
     // sd(deck, "batman");
 
     // board = prepareBoard(deck);
     // sw(board, "SW", "OK");
+    board = prepareBoard(deck);
+    sw(board, "SW", "OK",false);
     //deck = unPrepareBoard(board);
     //sr(deck,52);
     //board = prepareBoard(deck);
@@ -876,8 +1350,16 @@ int main() {
 
     // char testing[100];
     // scanf("%s", testing);
-    printf("Hello, World!\n");
-    gameLoop();
+    //printf("Hello, World!\n");
+    //gameLoop();
+    char tmpArr[] = "C7:AS->F1";
+
+    bool test = isValidMove(tmpArr,board);
+    sw(board, "SW", "OK",false);
+
+
+    //char testing[100];
+    //scanf("%s", testing);
 
     // region stuff
 
