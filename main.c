@@ -6,6 +6,7 @@
 
 #define MAXCHAR 1000;
 
+
 //Structure definition
 typedef struct card Card;
 struct card{
@@ -390,31 +391,31 @@ printRight(){
 
 printFieldLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7, Field *f){
     // region printFieldLine
-    if(c1!=NULL)
+    if(c1!=NULL && c1->value!=NULL)
         c1->visible ? printf("%c%c\t",c1->value,c1->suit) : printf("%s\t","[]");
     else
         printf("\t","");
-    if(c2!=NULL)
+    if(c2!=NULL && c2->value!=NULL)
         c2->visible ? printf("%c%c\t",c2->value,c2->suit) : printf("%s\t","[]");
     else
         printf("\t","");
-    if(c3!=NULL)
+    if(c3!=NULL && c3->value!=NULL)
         c3->visible ? printf("%c%c\t",c3->value,c3->suit) : printf("%s\t","[]");
     else
         printf("\t","");
-    if(c4!=NULL)
+    if(c4!=NULL && c4->value!=NULL)
         c4->visible ? printf("%c%c\t",c4->value,c4->suit) : printf("%s\t","[]");
     else
         printf("\t","");
-    if(c5!=NULL)
+    if(c5!=NULL && c5->value!=NULL)
         c5->visible ? printf("%c%c\t",c5->value,c5->suit) : printf("%s\t","[]");
     else
         printf("\t","");
-    if(c6!=NULL)
+    if(c6!=NULL && c6->value!=NULL)
         c6->visible ? printf("%c%c\t",c6->value,c6->suit) : printf("%s\t","[]");
     else
         printf("\t","");
-    if(c7!=NULL)
+    if(c7!=NULL && c7->value!=NULL)
         c7->visible ? printf("%c%c\t\t\t",c7->value,c7->suit) : printf("%s\t\t\t","[]");
     else
         printf("\t","");
@@ -795,7 +796,7 @@ Card * getSecondLastCardFromColumn(Board *pBoard, int column) {
     if(column==1){
         Card *card = &pBoard->c1.cards;
         while(card!=NULL){
-            if(card->next->next==NULL){
+            if(card->next==NULL || card->next->next==NULL){
                 break;
             }
             card = card->next;
@@ -920,6 +921,47 @@ void moveCardToField(Card * card,Card * previousCard,Board * board,char fieldTo)
    }
 }
 
+bool checkIfCardFitOnCard(Card * cardFrom, Card * cardTo);
+
+void moveCardToColumn(Card * lastCardFrom,Card * secondLastCardFrom,Card * lastCardTo, char columnFrom, Board * board);
+
+void moveCardToColumn(Card * lastCardFrom,Card * secondLastCardFrom,Card * lastCardTo, char columnFrom, Board * board){
+    secondLastCardFrom->next=NULL;
+    secondLastCardFrom->visible=true;
+    lastCardTo->next=lastCardFrom;
+    Card * tmpCard;
+    Column * col;
+    if(columnFrom=='1'){
+        tmpCard=&board->c1.cards;
+        col = &board->c1;
+    }else if(columnFrom=='2'){
+        tmpCard=&board->c2.cards;
+        col = &board->c2;
+    }else if(columnFrom=='3'){
+        tmpCard=&board->c3.cards;
+        col = &board->c3;
+    }else if(columnFrom=='4'){
+        tmpCard=&board->c4.cards;
+        col = &board->c4;
+    }else if(columnFrom=='5'){
+        tmpCard=&board->c5.cards;
+        col = &board->c5;
+    }else if(columnFrom=='6'){
+        tmpCard=&board->c6.cards;
+        col = &board->c6;
+    }else if(columnFrom=='7'){
+        tmpCard=&board->c7.cards;
+        col = &board->c7;
+    }
+    //Only one card in column
+    if(tmpCard->next==NULL){
+        //We have to take a copy of the card because we are wiping it from existence
+        lastCardTo->next= CreateCard(tmpCard->value,tmpCard->suit,tmpCard->visible);
+        Column emptyCol = { NULL, NULL, NULL };
+        *col=emptyCol;
+    }
+}
+
 isValidMove(char move[6], Board * board){
     char * from = strtok(move, "->");
     char * to = strtok(NULL, "->");
@@ -1000,7 +1042,22 @@ isValidMove(char move[6], Board * board){
         if(cardFrom==NULL && columnFrom!=NULL){
             if(cardTo!=NULL && columnTo!=NULL){
                 //column to column-card i.e. C1->C2:JH
-
+                int column = (int)columnTo[1]-48;
+                if(column==1 || column==2 || column==3 || column==4 || column==5 || column==6 || column==7){
+                    Card *lastCardTo = getLastCardFromColumn(board, column);
+                    //Check if cardTo is the last Card as you cannot move a card to the middle of a column
+                    if((char)cardTo[0]==lastCardTo->value && (char)cardTo[1]==lastCardTo->suit){
+                        column = (int)columnFrom[1]-48;
+                        if(column==1 || column==2 || column==3 || column==4 || column==5 || column==6 || column==7){
+                            Card *lastCardFrom = getLastCardFromColumn(board, column);
+                            Card *secondLastCardFrom = getSecondLastCardFromColumn(board, column);
+                            if(checkIfCardFitOnCard(lastCardFrom,lastCardTo)){
+                                moveCardToColumn(lastCardFrom,secondLastCardFrom,lastCardTo,columnFrom[1],board);
+                                return true;
+                            }
+                        }
+                    }
+                }
             }else if(cardTo==NULL && columnTo!=NULL){
                 //column to column i.e. C1->C2
 
@@ -1048,6 +1105,22 @@ char returnCardValueOneGreater(char value){
     }else if(value=='K'){
         return 'K';
     }
+}
+
+bool checkIfCardFitOnCard(Card * cardFrom, Card * cardTo){
+    //c1 is cardFrom and c2 is cardTo
+    if(returnCardValueOneGreater(cardFrom->value)==cardTo->value){
+        if(cardFrom->suit=='H' || cardFrom->suit=='D'){
+            if(cardTo->suit=='S' || cardTo->suit=='C'){
+                return true;
+            }
+        }else if(cardFrom->suit=='S' || cardFrom->suit=='C'){
+            if(cardTo->suit=='H' || cardTo->suit=='D'){
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 bool checkCardToField(Board * board, char cardFrom[], char fieldTo[]){
@@ -1395,7 +1468,7 @@ int main() {
 
     bool test = isValidMove(tmpArr,board);
 
-    char tmpArr2[] = "C6->F1";
+    char tmpArr2[] = "C1->C2:9C";
 
     test = isValidMove(tmpArr2,board);
 
