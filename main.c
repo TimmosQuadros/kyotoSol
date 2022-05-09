@@ -338,7 +338,7 @@ Card * ld(char filename[]){
 
     if(unixTypeOS){
         //We need to go up one folder since mac is in the cmake-build-debug folder...
-        strcat(filenameTmp,"../");strcat(filenameTmp, filename);
+        strcpy(filenameTmp,"../");strcat(filenameTmp, filename);
         fp = fopen(filenameTmp,"r");
     }else{
         fp = fopen(filename,"r");
@@ -871,16 +871,52 @@ void moveCardToField(Card * card,Card * previousCard,Board * board,char fieldTo)
            board->f1.cards = *card;
        }else{
            //Reverse linked list for the fields
-           Card *tmp = &board->f1.cards;
+           Card tmp = board->f1.cards;
            board->f1.cards = *card;
-           card->next = tmp;
+           board->f1.cards.next = &tmp;
        }
    } else if(fieldTo=='2'){
+       previousCard->next=NULL;
+       //Last card is always visible
+       previousCard->visible=true;
 
+       //Move card
+       if(board->f2.cards.value==NULL){ //if card is an empty dummy card
+           board->f2.cards = *card;
+       }else{
+           //Reverse linked list for the fields
+           Card tmp = board->f2.cards;
+           board->f2.cards = *card;
+           board->f2.cards.next = &tmp;
+       }
    }else if(fieldTo=='3'){
+       previousCard->next=NULL;
+       //Last card is always visible
+       previousCard->visible=true;
 
+       //Move card
+       if(board->f3.cards.value==NULL){ //if card is an empty dummy card
+           board->f3.cards = *card;
+       }else{
+           //Reverse linked list for the fields
+           Card tmp = board->f3.cards;
+           board->f3.cards = *card;
+           board->f3.cards.next = &tmp;
+       }
    }else if(fieldTo=='4'){
+       previousCard->next=NULL;
+       //Last card is always visible
+       previousCard->visible=true;
 
+       //Move card
+       if(board->f4.cards.value==NULL){ //if card is an empty dummy card
+           board->f4.cards = *card;
+       }else{
+           //Reverse linked list for the fields
+           Card tmp = board->f4.cards;
+           board->f4.cards = *card;
+           board->f4.cards.next = &tmp;
+       }
    }
 }
 
@@ -942,6 +978,9 @@ isValidMove(char move[6], Board * board){
                 Card *lastCard = getLastCardFromColumn(board, column);
                 char p[2]={lastCard->value,lastCard->suit};
                 if(checkCardToField(board, p,fieldTo)){
+                    Card *secondLastCard = getSecondLastCardFromColumn(board, column);
+
+                    moveCardToField(lastCard,secondLastCard,board,fieldTo[1]);
                     return true;
                 }
             }
@@ -1352,9 +1391,14 @@ int main() {
     // scanf("%s", testing);
     //printf("Hello, World!\n");
     //gameLoop();
-    char tmpArr[] = "C7:AS->F1";
+    char tmpArr[] = "C7->F1";
 
     bool test = isValidMove(tmpArr,board);
+
+    char tmpArr2[] = "C6->F1";
+
+    test = isValidMove(tmpArr2,board);
+
     sw(board, "SW", "OK",false);
 
 
