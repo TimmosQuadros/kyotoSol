@@ -170,7 +170,7 @@ void switchPlace(Card *pCard, Card *pCard1);
 Card * unPrepareBoard(Board * board);
 Board * prepareBoard(Card *deck);
 
-void sr(Card * deck, int size, Board * board){
+Board * sr(Card * deck, int size, Board * board){
     unPrepareBoard(board);
     Card * firstCard = deck;
     Card * prevRandomCard1 = deck;
@@ -192,7 +192,7 @@ void sr(Card * deck, int size, Board * board){
         prevRandomCard1 = firstCard;
         prevRandomCard2 = firstCard;
     }
-    board = prepareBoard(deck);
+    return prepareBoard(deck);
 }
 
 void switchPlace(Card *prevRandomCard1, Card *prevRandomCard2) {
@@ -1595,7 +1595,7 @@ void gameLoop()
                 else{
                     strcpy(lastCommand, "SR");
                     strcpy(message, "OK");
-                    sr(deck, 52,board);
+                    board = sr(deck, 52,board);
                 }
             }
             else if(strcmp(userInput, "QQ") == 0 && strcmp(phase, "STARTUP") == 0) // #6
