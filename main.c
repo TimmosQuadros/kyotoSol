@@ -1533,8 +1533,9 @@ void gameLoop()
         // 01 - check if the game is done
 
         // 02 - ask for command input
-        char * userInput[100];
+        char * userInput= malloc(sizeof (char[100]));
         fgets(userInput, 100, stdin);
+        userInput[strlen(userInput)-1]='\0';
 
         // 03 - validation for input
         // no
