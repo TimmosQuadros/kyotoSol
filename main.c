@@ -1525,7 +1525,6 @@ void gameLoop()
 
     // the endless game loop
     while(running)
-
     {
         // 00 - print to the screen / render
         sw(board, lastCommand, message, false);
@@ -1533,12 +1532,11 @@ void gameLoop()
         // 01 - check if the game is done
 
         // 02 - ask for command input
-
         char userInput [100];
-
         scanf("%100s", &userInput);
 
         // 03 - validation for input
+        // no
 
         // no input
         if(strlen(userInput) == 0)
@@ -1576,6 +1574,7 @@ void gameLoop()
             else if(strcmp(userInput, "QQ") == 0 && strcmp(phase, "STARTUP") == 0) // #6
             {
                 strcpy(lastCommand, "QQ");
+                strcpy(message, "OK");
                 printf("\n");
                 printf("the program has stop and will be killed in 3 seconds");
                 sleep(3);
@@ -1584,23 +1583,42 @@ void gameLoop()
             }
             else if(strcmp(userInput, "P") == 0 && strcmp(phase, "STARTUP") == 0) // #7
             {
+                // TODO : check if everything is ready to play the game
+                strcpy(lastCommand, "P");
+                strcpy(message, "OK");
                 strcpy(phase, "PLAY");
             }
             else if(strcmp(userInput, "Q") == 0 && strcmp(phase, "PLAY") == 0) // #8
             {
+                strcpy(lastCommand, "Q");
+                strcpy(message, "OK");
                 strcpy(phase, "STARTUP");
             }
             else if(strcmp(userInput, "U") == 0) // #10
-            {}
+            {
+                // TODO: get U to work
+                strcpy(lastCommand, "U");
+                strcpy(message, "OK");
+                // u();
+            }
             else if(strcmp(userInput, "R") == 0) // #11
-            {}
+            {
+                // TODO: get R to work
+                strcpy(lastCommand, "R");
+                strcpy(message, "OK");
+            }
             else if(strcmp(userInput, "SD") == 0 && strcmp(phase, "STARTUP") == 0) // #5 - if the user does not set a filename, use the default
             {
+                strcpy(lastCommand, "SD");
+                strcpy(message, "OK");
                 sd(deck, "");
             }
             else if(strcmp(userInput, "SI") == 0 && strcmp(phase, "STARTUP") == 0) // #3 - if the user didn't set the second parameter
             {
-
+                // TODO: get SI to work
+                strcpy(lastCommand, "SI");
+                strcpy(message, "OK");
+                // si();
             }
             else
             {
@@ -1681,8 +1699,6 @@ void gameLoop()
         // TODO: change this so it works with undo, save, redo, osv.
         strcpy(commandList[clIndex], userInput);
         clIndex++;
-
-
     }
 }
 
