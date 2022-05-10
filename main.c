@@ -7,6 +7,7 @@
 #define MAXCHAR 1000;
 
 
+
 //Structure definition
 typedef struct card Card;
 struct card{
@@ -166,9 +167,20 @@ const char standardDeck[52][2] =
       for(item = (array) + count; keep; keep = !keep)
 
 void switchPlace(Card *pCard, Card *pCard1);
-
+Card * findCard(Board * board, int column, char value, char suit);
+Card * findCardB4(Board *pBoard, int column, char value, char suit);
+Card * getFieldCard(char field, Board *board);
+bool checkIfFieldToIsEmpty(char fieldTo, Board *board);
+bool checkIfFieldFromHasAce(char fieldFrom, Board *board);
+Card *removeLastCardFromField(char fieldFrom, Board *board);
 Card * unPrepareBoard(Board * board);
 Board * prepareBoard(Card *deck);
+bool checkCardToField(Board * board, char cardFrom[], char fieldTo[]);
+Card * getLastCardFromColumn(Board *pBoard, int column);
+Card * getSecondLastCardFromColumn(Board *pBoard, int column);
+void moveCardToField(Card * card,Card * previousCard,Board * board,char fieldTo);
+bool checkIfCardFitOnCard(Card * cardFrom, Card * cardTo);
+void moveCardToColumn(Card * lastCardFrom,Card * secondLastCardFrom,Card * lastCardTo, char columnFrom, Board * board);
 
 Board * sr(Card * deck, int size, Board * board){
     unPrepareBoard(board);
@@ -783,10 +795,6 @@ void s(Board * board, char * movelist[], char * undoList[], char * commandList[]
 //    fclose(fp);
 }
 
-bool checkCardToField(Board * board, char cardFrom[], char fieldTo[]);
-// this is the master yoda function
-Card * getLastCardFromColumn(Board *pBoard, int column);
-
 Card * getLastCardFromColumn(Board *pBoard, int column) {
     if(column==1){
         Card *card = &pBoard->c1.cards;
@@ -853,8 +861,6 @@ Card * getLastCardFromColumn(Board *pBoard, int column) {
         return card;
     }
 }
-
-Card * getSecondLastCardFromColumn(Board *pBoard, int column);
 
 Card * getSecondLastCardFromColumn(Board *pBoard, int column) {
     if(column==1){
@@ -923,8 +929,6 @@ Card * getSecondLastCardFromColumn(Board *pBoard, int column) {
     }
 }
 
-void moveCardToField(Card * card,Card * previousCard,Board * board,char fieldTo);
-
 void moveCardToField(Card * card,Card * previousCard,Board * board,char fieldTo){
    if(fieldTo=='1'){
        previousCard->next=NULL;
@@ -985,9 +989,7 @@ void moveCardToField(Card * card,Card * previousCard,Board * board,char fieldTo)
    }
 }
 
-bool checkIfCardFitOnCard(Card * cardFrom, Card * cardTo);
 
-void moveCardToColumn(Card * lastCardFrom,Card * secondLastCardFrom,Card * lastCardTo, char columnFrom, Board * board);
 
 void moveCardToColumn(Card * lastCardFrom,Card * secondLastCardFrom,Card * lastCardTo, char columnFrom, Board * board){
     secondLastCardFrom->next=NULL;
@@ -1026,18 +1028,8 @@ void moveCardToColumn(Card * lastCardFrom,Card * secondLastCardFrom,Card * lastC
     }
 }
 
-Card * findCard(Board * board, int column, char value, char suit);
 
-Card * findCardB4(Board *pBoard, int column, char value, char suit);
-
-Card * getFieldCard(char field, Board *board);
-
-bool checkIfFieldToIsEmpty(char fieldTo, Board *board);
-
-bool checkIfFieldFromHasAce(char fieldFrom, Board *board);
-
-Card *removeLastCardFromField(char fieldFrom, Board *board);
-
+// this is the master yoda function
 bool isValidMove(char move[6], Board * board){
     char * from = strtok(move, "->");
     char * to = strtok(NULL, "->");
