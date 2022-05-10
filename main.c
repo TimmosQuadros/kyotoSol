@@ -962,6 +962,10 @@ void moveCardToColumn(Card * lastCardFrom,Card * secondLastCardFrom,Card * lastC
     }
 }
 
+Card * findCard(Board * board, int column, char value, char suit);
+
+Card * findCardB4(Board *pBoard, int column, char value, char suit);
+
 isValidMove(char move[6], Board * board){
     char * from = strtok(move, "->");
     char * to = strtok(NULL, "->");
@@ -1060,21 +1064,125 @@ isValidMove(char move[6], Board * board){
                 }
             }else if(cardTo==NULL && columnTo!=NULL){
                 //column to column i.e. C1->C2
-
+                int column = (int)columnTo[1]-48;
+                if(column==1 || column==2 || column==3 || column==4 || column==5 || column==6 || column==7) {
+                    Card * lastCardTo = getLastCardFromColumn(board, column);
+                    column = (int)columnFrom[1]-48;
+                    if(column==1 || column==2 || column==3 || column==4 || column==5 || column==6 || column==7){
+                        Card *lastCardFrom = getLastCardFromColumn(board, column);
+                        Card *secondLastCardFrom = getSecondLastCardFromColumn(board, column);
+                        if(checkIfCardFitOnCard(lastCardFrom,lastCardTo)){
+                            moveCardToColumn(lastCardFrom,secondLastCardFrom,lastCardTo,columnFrom[1],board);
+                            return true;
+                        }
+                    }
+                }
             }
         }else if(cardFrom!=NULL && columnFrom!=NULL){
             if(cardTo!=NULL && columnTo!=NULL){
                 //column-card to column-card i.e. C1:TH->C2:JS
-
+                int column = (int)columnTo[1]-48;
+                if(column==1 || column==2 || column==3 || column==4 || column==5 || column==6 || column==7) {
+                    Card * lastCardTo = getLastCardFromColumn(board, column);
+                    //Check if cardTo is the last Card as you cannot move a bunch of cards to the middle of a column
+                    if ((char) cardTo[0] == lastCardTo->value && (char) cardTo[1] == lastCardTo->suit) {
+                        column = (int)columnFrom[1]-48;
+                        if(column==1 || column==2 || column==3 || column==4 || column==5 || column==6 || column==7) {
+                            Card *cardFromTmp = findCard(board,column,cardFrom[0],cardFrom[1]);
+                            if(cardFromTmp->next==NULL){
+                                //Then it is the last card
+                                if(checkIfCardFitOnCard(cardFromTmp,lastCardTo)){
+                                    moveCardToColumn(cardFromTmp,cardFromTmp,lastCardTo,columnFrom[1],board);
+                                    return true;
+                                }
+                            }else{
+                                Card *previousCardFromTmp = findCardB4(board,column,cardFromTmp->value,cardFromTmp->suit);
+                                if(cardFromTmp==previousCardFromTmp){
+                                    //Then it was the only card in the column
+                                    if(checkIfCardFitOnCard(cardFromTmp,lastCardTo)){
+                                        moveCardToColumn(cardFromTmp,cardFromTmp,lastCardTo,columnFrom[1],board);
+                                        return true;
+                                    }
+                                }else{
+                                    //There are more cards in the column
+                                    if(checkIfCardFitOnCard(cardFromTmp,lastCardTo)){
+                                        previousCardFromTmp->next=NULL;
+                                        previousCardFromTmp->visible=true;
+                                        lastCardTo->next = cardFromTmp;
+                                        return true;
+                                    }
+                                }
+                            }
+                            //TODO TimmosQuadros
+                        }
+                    }
+                }
             }else if(cardTo==NULL && columnTo!=NULL){
                 //column-card to column i.e. C1:TH->C2
-
+                int column = (int)columnTo[1]-48;
+                if(column==1 || column==2 || column==3 || column==4 || column==5 || column==6 || column==7) {
+                    Card * lastCardTo = getLastCardFromColumn(board, column);
+                    column = (int)columnFrom[1]-48;
+                    if(column==1 || column==2 || column==3 || column==4 || column==5 || column==6 || column==7) {
+                        Card * cardFromTmp = findCard(board, column, cardFrom[0], cardFrom[1]);
+                        if(cardFromTmp!=NULL){
+                            Card *previousCardFromTmp = findCardB4(board,column,cardFromTmp->value,cardFromTmp->suit);
+                            if(previousCardFromTmp!=NULL){
+                                if(cardFromTmp->next==NULL){
+                                    //It's the last card
+                                    if(checkIfCardFitOnCard(cardFromTmp,lastCardTo)){
+                                        moveCardToColumn(cardFromTmp,previousCardFromTmp,lastCardTo,columnFrom[1],board);
+                                        return true;
+                                    }
+                                }else{
+                                    if(checkIfCardFitOnCard(cardFromTmp,lastCardTo)){
+                                        previousCardFromTmp->next=NULL;
+                                        previousCardFromTmp->visible=true;
+                                        lastCardTo->next = cardFromTmp;
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }else{
         return false;
     }
     return false;
+}
+
+Card * findCardB4(Board *board, int column, char value, char suit) {
+    Card * card;
+    if(column==1){
+        card = &board->c1.cards;
+    }else if(column==2){
+        card = &board->c2.cards;
+    }else if(column==3){
+        card = &board->c3.cards;
+    }else if(column==4){
+        card = &board->c4.cards;
+    }else if(column==5){
+        card = &board->c5.cards;
+    }else if(column==6){
+        card = &board->c6.cards;
+    }else if(column==7){
+        card = &board->c7.cards;
+    }
+
+    if(card->next==NULL){
+        return card;
+    }else{
+        while(card->next!=NULL){
+            if(card->next->value==value && card->next->suit==suit){
+                break;
+            }
+            card = card->next;
+        }
+    }
+    return card;
 }
 
 char returnCardValueOneGreater(char value){
@@ -1223,62 +1331,35 @@ void removeLastCardFromColumn(int column, Board * board){
     }
 }
 
-Card * findCard(Board * board, char value, char suit){
-    Card * c = &board->c1.cards;
-    while(c!=NULL){
-        if(strcmp(value,c->value)==0 && strcmp(suit,c->suit)==0){
-            return c;
-        }
-        c = c->next;
+Card * findCard(Board * board, int column, char value, char suit){
+    Card * card;
+    if(column==1){
+        card = &board->c1.cards;
+    }else if(column==2){
+        card = &board->c2.cards;
+    }else if(column==3){
+        card = &board->c3.cards;
+    }else if(column==4){
+        card = &board->c4.cards;
+    }else if(column==5){
+        card = &board->c5.cards;
+    }else if(column==6){
+        card = &board->c6.cards;
+    }else if(column==7){
+        card = &board->c7.cards;
     }
 
-    c = &board->c2.cards;
-    while(c!=NULL){
-        if(strcmp(value,c->value)==0 && strcmp(suit,c->suit)==0){
-            return c;
+    if(card->next==NULL){
+        return card;
+    }else{
+        while(card->next!=NULL){
+            if(card->value==value && card->suit==suit){
+                break;
+            }
+            card = card->next;
         }
-        c = c->next;
     }
-
-    c = &board->c3.cards;
-    while(c!=NULL){
-        if(strcmp(value,c->value)==0 && strcmp(suit,c->suit)==0){
-            return c;
-        }
-        c = c->next;
-    }
-
-    c = &board->c4.cards;
-    while(c!=NULL){
-        if(strcmp(value,c->value)==0 && strcmp(suit,c->suit)==0){
-            return c;
-        }
-        c = c->next;
-    }
-
-    c = &board->c5.cards;
-    while(c!=NULL){
-        if(strcmp(value,c->value)==0 && strcmp(suit,c->suit)==0){
-            return c;
-        }
-        c = c->next;
-    }
-
-    c = &board->c6.cards;
-    while(c!=NULL){
-        if(strcmp(value,c->value)==0 && strcmp(suit,c->suit)==0){
-            return c;
-        }
-        c = c->next;
-    }
-
-    c = &board->c7.cards;
-    while(c!=NULL){
-        if(strcmp(value,c->value)==0 && strcmp(suit,c->suit)==0){
-            return c;
-        }
-        c = c->next;
-    }
+    return card;
 }
 
 // this is the master function
@@ -1464,13 +1545,17 @@ int main() {
     // scanf("%s", testing);
     //printf("Hello, World!\n");
     //gameLoop();
-    char tmpArr[] = "C7->F1";
+    char tmpArr[] = "C7->F2";
 
     bool test = isValidMove(tmpArr,board);
 
-    char tmpArr2[] = "C1->C2:9C";
+    char tmpArr2[] = "C1->C2";
 
     test = isValidMove(tmpArr2,board);
+
+    char tmpArr3[] = "C5:7S->C2:8H";
+
+    test = isValidMove(tmpArr3,board);
 
     sw(board, "SW", "OK",false);
 
