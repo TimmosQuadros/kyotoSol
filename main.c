@@ -376,6 +376,8 @@ Card * ld(char filename[]){
     return linked_list;
 }
 
+// region prints functions
+
 void printTop(){
     for (int i = 1; i<8; i++){
         printf("%c%d\t",'C',i);
@@ -528,6 +530,10 @@ void printLineFaceUp(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, 
     printf("\n","");
     // endregion
 }
+// endregion
+
+// region other functions
+
 
 bool cardsLeft(Board *board){
     if(&board->c1.cards!=NULL || &board->c2.cards!=NULL || &board->c3.cards!=NULL || &board->c4.cards!=NULL
@@ -1490,8 +1496,10 @@ Card * findCard(Board * board, int column, char value, char suit){
     }
     return card;
 }
-
+// endregion
 // this is the master function
+
+
 void gameLoop()
 {
     // start values -----------------------------------------
@@ -1529,7 +1537,11 @@ void gameLoop()
     while(running)
     {
         // 00 - print to the screen / render
-        sw(board, lastCommand, message, false);
+        if(lastCommand != "SW")
+        {
+            sw(board, lastCommand, message, false);
+        }
+
 
         // 01 - check if the game is done
 
@@ -1547,11 +1559,21 @@ void gameLoop()
             continue; // resets the loop
         }
 
-        // simply commands: SW, SR, QQ, P, Q, U, R | SD, SI
+        // simply commands: LD, SW, SR, QQ, P, Q, U, R | SD, SI
         // is the input only 1 to 2 chars?
         if(strlen(userInput) > 0 && strlen(userInput) < 3)
         {
             // 04 - do command, if any
+
+            if(strcmp(userInput, "LD") == 0 && strcmp(phase, "STARTUP") == 0) // #1
+            {
+                strcpy(lastCommand, "LD");
+                strcpy(message, "OK");
+
+                deck = ld("cardDeck");
+                board = prepareBoard(deck);
+            }
+
             if(strcmp(userInput, "SW") == 0 && strcmp(phase, "STARTUP") == 0) // #2
             {
                 if(board == NULL){
@@ -1719,6 +1741,9 @@ void gameLoop()
         // TODO: change this so it works with undo, save, redo, osv.
         strcpy(commandList[clIndex], userInput);
         clIndex++;
+
+        // sleep is needed, else values don't have their values yet
+        sleep(0.1);
     }
 }
 
