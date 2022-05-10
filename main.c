@@ -1721,7 +1721,22 @@ void gameLoop()
                 printf("\n temp LD <filename> %s \n", temp);
                 printf("\n fname LD <filename> %s \n", filename);
 
-                FILE *fp = fopen(filename, "r");
+                bool txt = containsTxt(filename);
+
+                FILE *fp = NULL;
+
+                if(txt){
+                    fp = fopen(filename,"r");
+                }
+                else{
+                    char * temp;
+                    strcpy(temp, filename);
+                    strcat(temp, ".txt");
+
+                    fp = fopen(temp, "r");
+                }
+
+
 
                 if(fp == NULL) // the file does not exit
                 {
