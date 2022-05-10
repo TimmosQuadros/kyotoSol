@@ -319,6 +319,21 @@ Board * prepareBoard(Card *deck){
     return board;
 }
 
+bool checkFile(char filename[]){
+    FILE *fp = fopen(filename, "r");
+
+    if(fp == NULL) // the file does not exit
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+
+    fclose(fp);
+}
+
 Card * ld(char filename[]){
     FILE *fp;
     char row[1000];
@@ -1565,11 +1580,17 @@ void gameLoop()
 
             if(strcmp(userInput, "LD") == 0 && strcmp(phase, "STARTUP") == 0) // #1
             {
-                strcpy(lastCommand, "LD");
-                strcpy(message, "OK");
-
-                deck = ld("cardDeck");
-                board = prepareBoard(deck);
+                if(checkFile("cardDeck")){
+                    strcpy(lastCommand, "LD");
+                    strcpy(message, "OK");
+                    deck = ld("cardDeck");
+                    board = prepareBoard(deck);
+                }
+                else
+                {
+                    strcpy(lastCommand, "LD");
+                    strcpy(message, "error: default file is gone");
+                }
             }
 
             if(strcmp(userInput, "SW") == 0 && strcmp(phase, "STARTUP") == 0) // #2
