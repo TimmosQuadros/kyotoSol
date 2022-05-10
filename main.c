@@ -1729,11 +1729,11 @@ void gameLoop()
                     fp = fopen(filename,"r");
                 }
                 else{
-                    char * temp;
-                    strcpy(temp, filename);
-                    strcat(temp, ".txt");
+                    char * temp2;
+                    strcpy(temp2, filename);
+                    strcat(temp2, ".txt");
 
-                    fp = fopen(temp, "r");
+                    fp = fopen(temp2, "r");
                 }
 
 
