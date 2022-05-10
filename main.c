@@ -1524,14 +1524,6 @@ void gameLoop()
 
     //sd(deck, "batman");
 
-    // TODO: move these functions around
-//    board = prepareBoard(deck);
-//    sw(board, "SW", "OK",false);
-//    deck = unPrepareBoard(board);
-//    sr(deck,52);
-//    board = prepareBoard(deck);
-//    sw(board, "SW", "OK",false);
-
 
     // the endless game loop
     while(running)
@@ -1613,10 +1605,16 @@ void gameLoop()
             }
             else if(strcmp(userInput, "P") == 0 && strcmp(phase, "STARTUP") == 0) // #7
             {
-                // TODO : check if everything is ready to play the game
-                strcpy(lastCommand, "P");
-                strcpy(message, "OK");
-                strcpy(phase, "PLAY");
+                // is the deck ready
+                if(deck == NULL){
+                    strcpy(lastCommand, "P");
+                    strcpy(message, "error: no deck");
+                }
+                else{
+                    strcpy(lastCommand, "P");
+                    strcpy(message, "OK");
+                    strcpy(phase, "PLAY");
+                }
             }
             else if(strcmp(userInput, "Q") == 0 && strcmp(phase, "PLAY") == 0) // #8
             {
@@ -1657,15 +1655,19 @@ void gameLoop()
         }
         else // hard commands
         {
+            printf("\n hard commands ---- % \n", strlen(userInput));
+
             // hard commands: LD <filename>, SI <split>, SD <filename>, L <filename>, S <filename>
             // 04 - do command, if any
 
-            if(strcmp(&userInput[0], "L") == 0 && strcmp(&userInput[1], "D") == 0
-            && userInput > 2 && strcmp(phase, "STARTUP") == 0) // #1 - LD <filename>
+            if(userInput[0] == 'L' && userInput[1] == 'D'
+            && strlen(userInput) > 2 && strcmp(phase, "STARTUP") == 0) // #1 - LD <filename>
             {
                 char temp = strtok(userInput, " ");
                 char filename = strtok(NULL, " ");
-                printf("\n %s \n", filename);
+
+                printf("\n temp LD <filename> %s \n", temp);
+                printf("\n fname LD <filename> %s \n", filename);
 
                 FILE *fp = fopen(filename, "r");
 
@@ -1684,34 +1686,44 @@ void gameLoop()
 
                 fclose(fp);
             }
-            else if(strcmp(&userInput[0], "S") == 0 && strcmp(&userInput[1], "I") == 0
-            && userInput > 2 && strcmp(phase, "STARTUP") == 0) // #3 - SI <split>
+            else if(userInput[0] == 'S' && userInput[1] == 'I'
+            && strlen(userInput) > 2 && strcmp(phase, "STARTUP") == 0) // #3 - SI <split>
             {
+                printf("\n SI <split> %s \n", userInput);
+
                 // TODO: make SI <split> to work
                 strcpy(lastCommand, userInput);
                 strcpy(message, "OK");
                 // si();
             }
-            else if(strcmp(&userInput[0], "S") == 0 && strcmp(&userInput[1], "D") == 0
-            && userInput > 2 && strcmp(phase, "STARTUP") == 0) // #5 - SD <filename>
+            else if(userInput[0] == 'S' && userInput[1] == 'D'
+            && strlen(userInput) > 2 && strcmp(phase, "STARTUP") == 0) // #5 - SD <filename>
             {
-                //TODO: check if there is a better way to do this
+                //TODO: check if this works
                 char temp = strtok(userInput, " ");
                 char * fname = strtok(NULL, " ");
+
+                printf("\n temp SD <filename> %s \n", temp);
+                printf("\n fname SD <filename> %s \n", fname);
 
                 strcpy(lastCommand, userInput);
                 strcpy(message, "OK");
 
                 sd(deck, fname);
             }
-            else if(strcmp(&userInput[0], "L") == 0 && userInput > 2 && strcmp(phase, "STARTUP") == 0) // #13 - L <filename>
+            else if(userInput[0] == 'L' && strlen(userInput) > 2 && strcmp(phase, "STARTUP") == 0) // #13 - L <filename>
             {
                 // TODO: read the pdf, to check which state we need to be in
+
+                printf("\n L <filename> %s \n", userInput);
+
                 strcpy(lastCommand, userInput);
                 strcpy(message, "OK");
             }
-            else if(strcmp(&userInput[0], "S") == 0 && userInput > 2 && strcmp(phase, "PLAY") == 0) // #12 - S <filename>
+            else if(userInput[0] == 'S' && strlen(userInput) > 2 && strcmp(phase, "PLAY") == 0) // #12 - S <filename>
             {
+                printf("\n S <filename> %s \n", userInput);
+
                 // TODO: read the pdf, to check which state we need to be in
                 strcpy(lastCommand, userInput);
                 strcpy(message, "OK");
