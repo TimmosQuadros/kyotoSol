@@ -422,7 +422,7 @@ void printFieldLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, C
     else
         printf("\t","");
     if(f!=NULL)
-        f->cards.visible ? printf("%c%c\t",f->cards.value,f->cards.suit) : printf("%s\t%s","[]",f->name);
+        f->cards.visible ? printf("%c%c\t%s",f->cards.value,f->cards.suit, f->name) : printf("%s\t%s","[]",f->name);
     printf("\n","");
     // endregion
 }
@@ -1700,7 +1700,7 @@ void gameLoop()
             && strlen(userInput) > 2 && strcmp(phase, "STARTUP") == 0) // #5 - SD <filename>
             {
                 //TODO: check if this works
-                char temp = strtok(userInput, " ");
+                char * temp = strtok(userInput, " ");
                 char * fname = strtok(NULL, " ");
 
                 printf("\n temp SD <filename> %s \n", temp);
