@@ -677,8 +677,6 @@ void sd(Deck * deck, char * filename){
     {
         strcpy(temp, filename);
 
-        strcat(temp, ".txt");
-
         fp = fopen(temp, "w");
     }
     else // there was no filename given by the user
@@ -1736,7 +1734,7 @@ void gameLoop()
             }
 
             // <Game Moves> | <from>-><to>  |
-            else if(strstr(userInput, "->")) // #9
+            else if(strstr(userInput, "->") && strcmp(phase, "PLAY") == 0) // #9
             {
                 // check if the move is valid
                 bool valid = isValidMove(userInput, board);
