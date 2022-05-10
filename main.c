@@ -1537,11 +1537,14 @@ void gameLoop()
     while(running)
     {
         // 00 - print to the screen / render
-        if(lastCommand != "SW")
+        if(strcmp(lastCommand, "SW") != 0)
         {
             sw(board, lastCommand, message, false);
         }
 
+        // reset values
+        strcpy(message, "");
+        strcpy(lastCommand, "");
 
         // 01 - check if the game is done
 
@@ -1603,8 +1606,8 @@ void gameLoop()
                 strcpy(lastCommand, "QQ");
                 strcpy(message, "OK");
                 printf("\n");
-                printf("the program has stop and will be killed in 3 seconds");
-                sleep(3);
+                printf("the program has stop and will be killed in 2 seconds");
+                sleep(2);
                 running = false;
                 continue;
             }
@@ -1743,7 +1746,7 @@ void gameLoop()
         clIndex++;
 
         // sleep is needed, else values don't have their values yet
-        sleep(0.1);
+        // sleep(2);
     }
 }
 
