@@ -1043,15 +1043,27 @@ isValidMove(char move[6], Board * board){
                 if ((char) cardTo[0] == lastCardTo->value && (char) cardTo[1] == lastCardTo->suit) {
                     Card * fieldCard = getFieldCard(fieldFrom[1],board);
                     if(checkIfCardFitOnCard(fieldCard,lastCardTo)){
+                        //Do the move
                         fieldCard->next=NULL;
                         lastCardTo->next=fieldCard;
+                        return true;
                     }
                 }
             }
 
         }else if(cardTo==NULL && columnTo!=NULL){
             //field to column i.e. F1->C1
-
+            int column = (int)columnTo[1]-48;
+            if(column==1 || column==2 || column==3 || column==4 || column==5 || column==6 || column==7) {
+                Card * lastCardTo = getLastCardFromColumn(board, column);
+                Card * fieldCard = getFieldCard(fieldFrom[1],board);
+                if(checkIfCardFitOnCard(fieldCard,lastCardTo)){
+                    //Do the move
+                    fieldCard->next=NULL;
+                    lastCardTo->next=fieldCard;
+                    return true;
+                }
+            }
         }
     }else if(fieldFrom!=NULL && fieldTo!=NULL){
         //Field to Field i.e. F1->F2
