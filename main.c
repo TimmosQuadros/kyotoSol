@@ -322,6 +322,8 @@ Board * prepareBoard(Card *deck){
 bool checkFile(char filename[]){
     FILE *fp = fopen(filename, "r");
 
+
+
     if(fp == NULL) // the file does not exit
     {
         return false;
@@ -332,6 +334,14 @@ bool checkFile(char filename[]){
     }
 
     fclose(fp);
+}
+
+bool containsTxt(char filename[]){
+
+    if(strstr(filename, ".txt") != NULL)
+    { return true; }
+    else
+    { return false; }
 }
 
 Card * ld(char filename[]){
@@ -347,24 +357,37 @@ Card * ld(char filename[]){
         perror("getcwd() error");
         return 1;
     }*/
-    #ifdef _WIN32 // Includes both 32 bit and 64 bit
-        #ifdef _WIN64
-                printf("Windows 64 bit\n");
-            #else
-                printf("Windows 32 bit\n");
-            #endif
-    #else
-        unixTypeOS = true;
-    #endif
+//    #ifdef _WIN32 // Includes both 32 bit and 64 bit
+//        #ifdef _WIN64
+//                printf("Windows 64 bit\n");
+//            #else
+//                printf("Windows 32 bit\n");
+//            #endif
+//    #else
+//        unixTypeOS = true;
+//    #endif
 
-    if(unixTypeOS){
-        //We need to go up one folder since mac is in the cmake-build-debug folder...
-        strcpy(filenameTmp,"../");strcat(filenameTmp, filename);
-        fp = fopen(filenameTmp,"r");
-    }else{
+//    if(unixTypeOS){
+//        //We need to go up one folder since mac is in the cmake-build-debug folder...
+//        strcpy(filenameTmp,"../");strcat(filenameTmp, filename);
+//        fp = fopen(filenameTmp,"r");
+//    }else{
+//        fp = fopen(filename,"r");
+//    }
+
+    // check if the filename contains .txt in it
+    bool txt = containsTxt(filename);
+
+    if(txt){
         fp = fopen(filename,"r");
     }
+    else{
+        char * temp;
+        strcpy(temp, filename);
+        strcat(temp, ".txt");
 
+        fp = fopen(temp, "w");
+    }
 
     Card *newCard = NULL;
     Card *previous_card = NULL;
@@ -692,7 +715,17 @@ void sd(Deck * deck, char * filename){
     {
         strcpy(temp, filename);
 
-        fp = fopen(temp, "w");
+        bool txt = containsTxt(filename);
+        if(txt){
+            fp = fopen(temp, "w");
+        }
+        else
+        {
+            strcpy(temp, filename);
+            strcat(temp, ".txt");
+
+            fp = fopen(temp, "w");
+        }
     }
     else // there was no filename given by the user
     {
@@ -1580,7 +1613,7 @@ void gameLoop()
 
             if(strcmp(userInput, "LD") == 0 && strcmp(phase, "STARTUP") == 0) // #1
             {
-                if(checkFile("cardDeck")){
+                if(checkFile("cardDeck.txt")){
                     strcpy(lastCommand, "LD");
                     strcpy(message, "OK");
                     deck = ld("cardDeck");
@@ -1646,18 +1679,18 @@ void gameLoop()
                 strcpy(message, "OK");
                 strcpy(phase, "STARTUP");
             }
-            else if(strcmp(userInput, "U") == 0) // #10
+            else if(strcmp(userInput, "U") == 0 && strcmp(phase, "PLAY") == 0) // #10
             {
                 // TODO: get U to work
                 strcpy(lastCommand, "U");
-                strcpy(message, "OK");
+                strcpy(message, "not support");
                 // u();
             }
-            else if(strcmp(userInput, "R") == 0) // #11
+            else if(strcmp(userInput, "R") == 0 && strcmp(phase, "PLAY") == 0) // #11
             {
                 // TODO: get R to work
                 strcpy(lastCommand, "R");
-                strcpy(message, "OK");
+                strcpy(message, "not support");
             }
             else if(strcmp(userInput, "SD") == 0 && strcmp(phase, "STARTUP") == 0) // #5 - if the user does not set a filename, use the default
             {
@@ -1743,7 +1776,7 @@ void gameLoop()
                 printf("\n L <filename> %s \n", userInput);
 
                 strcpy(lastCommand, userInput);
-                strcpy(message, "OK");
+                strcpy(message, "not support");
             }
             else if(userInput[0] == 'S' && strlen(userInput) > 2 && strcmp(phase, "PLAY") == 0) // #12 - S <filename>
             {
@@ -1751,7 +1784,7 @@ void gameLoop()
 
                 // TODO: read the pdf, to check which state we need to be in
                 strcpy(lastCommand, userInput);
-                strcpy(message, "OK");
+                strcpy(message, "not support");
             }
 
             // <Game Moves> | <from>-><to>  |
@@ -1781,30 +1814,10 @@ void gameLoop()
         // TODO: change this so it works with undo, save, redo, osv.
         strcpy(commandList[clIndex], userInput);
         clIndex++;
-
-        // sleep is needed, else values don't have their values yet
-        // sleep(2);
     }
 }
 
 int main() {
-    //char stdDeck[52][2];
-    //strncpy(stdDeck,standardDeck,104);
-    //shuffle(stdDeck,52,2);
-//    Card *deck = NULL;
-//    Board *board = NULL;
-//    deck = ld("cardDeck");
-//
-//    board = prepareBoard(deck);
-//    sw(board, "SW", "OK",false);
-    //deck = unPrepareBoard(board);
-    //sr(deck,52);
-    //board = prepareBoard(deck);
-    //sw(board);
-
-    // char testing[100];
-    // scanf("%s", testing);
-    //printf("Hello, World!\n");
     gameLoop();
 
     // region new test stuff
