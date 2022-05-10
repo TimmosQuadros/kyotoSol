@@ -1674,7 +1674,7 @@ void gameLoop()
 
                 FILE *fp = fopen(filename, "r");
 
-                if(fp != NULL) // the file does not exit
+                if(fp == NULL) // the file does not exit
                 {
                     strcpy(lastCommand, userInput);
                     strcpy(message, "error: file does not exit");
