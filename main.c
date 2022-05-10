@@ -376,20 +376,20 @@ Card * ld(char filename[]){
     return linked_list;
 }
 
-printTop(){
+void printTop(){
     for (int i = 1; i<8; i++){
         printf("%c%d\t",'C',i);
     }
     printf("\n\n");
 }
 
-printRight(){
-    for (int i = 1; i<4; i++){
-        printf("\t\t%s\t%c%d\n\n","[]","F",i);
+void printRight(){
+    for (int i = 1; i<5; i++){
+        printf("\t\t\t\t\t\t\t\t%s\t%s%d\n\n","[]","F",i);
     }
 }
 
-printFieldLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7, Field *f){
+void printFieldLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7, Field *f){
     // region printFieldLine
     if(c1!=NULL && c1->value!=NULL)
         c1->visible ? printf("%c%c\t",c1->value,c1->suit) : printf("%s\t","[]");
@@ -425,7 +425,7 @@ printFieldLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *
     // endregion
 }
 
-printFieldLineFaceUp(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7, Field *f){
+void printFieldLineFaceUp(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7, Field *f){
     // region printFieldLineFaceUp
     if(c1!=NULL)
         printf("%c%c\t",c1->value,c1->suit);
@@ -461,7 +461,7 @@ printFieldLineFaceUp(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, 
     // endregion
 }
 
-printLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7){
+void printLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7){
     // region printLine
     if(c1!=NULL)
         c1->visible ? printf("%c%c\t",c1->value,c1->suit) : printf("%s\t","[]");
@@ -495,7 +495,7 @@ printLine(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7){
     // endregion
 }
 
-printLineFaceUp(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7){
+void printLineFaceUp(Card *c1,Card *c2, Card *c3, Card *c4, Card *c5, Card *c6, Card *c7){
     // region printLineFaceUp
     if(c1!=NULL)
         printf("%c%c\t",c1->value,c1->suit);
@@ -538,67 +538,74 @@ bool cardsLeft(Board *board){
     return false;
 }
 
-sw(Board *board, char lastC[], char message[], bool faceUp){
+void sw(Board *board, char lastC[], char message[], bool faceUp){
     // region sw
     //Clear the console
+    printf("\n");
     printTop();
 
-    Card *tmpC1 = NULL;Card *tmpC2 = NULL;Card *tmpC3 = NULL;Card *tmpC4 = NULL;
-    Card *tmpC5 = NULL;Card *tmpC6 = NULL;Card *tmpC7 = NULL;
-    Card *tmpF1 = NULL;Card *tmpF2 = NULL;Card *tmpF3 = NULL;Card *tmpF4 = NULL;
+    if(board != NULL){
+        Card *tmpC1 = NULL;Card *tmpC2 = NULL;Card *tmpC3 = NULL;Card *tmpC4 = NULL;
+        Card *tmpC5 = NULL;Card *tmpC6 = NULL;Card *tmpC7 = NULL;
+        Card *tmpF1 = NULL;Card *tmpF2 = NULL;Card *tmpF3 = NULL;Card *tmpF4 = NULL;
 
-    tmpC1 = &board->c1.cards;tmpC2 = &board->c2.cards;tmpC3 = &board->c3.cards;tmpC4 = &board->c4.cards;
-    tmpC5 = &board->c5.cards;tmpC6 = &board->c6.cards;tmpC7 = &board->c7.cards;
-    tmpF1 = &board->f1;tmpF2 = &board->f2;tmpF3 = &board->f3;tmpF4 = &board->f4;
+        tmpC1 = &board->c1.cards;tmpC2 = &board->c2.cards;tmpC3 = &board->c3.cards;tmpC4 = &board->c4.cards;
+        tmpC5 = &board->c5.cards;tmpC6 = &board->c6.cards;tmpC7 = &board->c7.cards;
+        tmpF1 = &board->f1;tmpF2 = &board->f2;tmpF3 = &board->f3;tmpF4 = &board->f4;
 
-    int i = 1;
-    while(tmpC1!=NULL || tmpC2!=NULL || tmpC3!=NULL || tmpC4!=NULL || tmpC5!=NULL || tmpC6!=NULL || tmpC7!=NULL){
-        if(i==1){
-            if(faceUp){
-                printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF1);
+        int i = 1;
+        while(tmpC1!=NULL || tmpC2!=NULL || tmpC3!=NULL || tmpC4!=NULL || tmpC5!=NULL || tmpC6!=NULL || tmpC7!=NULL){
+            if(i==1){
+                if(faceUp){
+                    printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF1);
+                }else{
+                    printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF1);
+                }
+            }else if(i==3){
+                if(faceUp){
+                    printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF2);
+                }else{
+                    printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF2);
+                }
+            }else if(i==5){
+                if(faceUp){
+                    printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF3);
+                }else{
+                    printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF3);
+                }
+            }else if(i==7){
+                if(faceUp){
+                    printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF4);
+                }else{
+                    printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF4);
+                }
             }else{
-                printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF1);
+                if(faceUp){
+                    printLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7);
+                }else{
+                    printLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7);
+                }
             }
-        }else if(i==3){
-            if(faceUp){
-                printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF2);
-            }else{
-                printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF2);
-            }
-        }else if(i==5){
-            if(faceUp){
-                printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF3);
-            }else{
-                printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF3);
-            }
-        }else if(i==7){
-            if(faceUp){
-                printFieldLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF4);
-            }else{
-                printFieldLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7,tmpF4);
-            }
-        }else{
-            if(faceUp){
-                printLineFaceUp(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7);
-            }else{
-                printLine(tmpC1,tmpC2,tmpC3,tmpC4,tmpC5,tmpC6,tmpC7);
-            }
+            i++;
+            if(tmpC1!=NULL)
+                tmpC1 = tmpC1->next;
+            if(tmpC2!=NULL)
+                tmpC2 = tmpC2->next;
+            if(tmpC3!=NULL)
+                tmpC3 = tmpC3->next;
+            if(tmpC4!=NULL)
+                tmpC4 = tmpC4->next;
+            if(tmpC5!=NULL)
+                tmpC5 = tmpC5->next;
+            if(tmpC6!=NULL)
+                tmpC6 = tmpC6->next;
+            if(tmpC7!=NULL)
+                tmpC7 = tmpC7->next;
         }
-        i++;
-        if(tmpC1!=NULL)
-            tmpC1 = tmpC1->next;
-        if(tmpC2!=NULL)
-            tmpC2 = tmpC2->next;
-        if(tmpC3!=NULL)
-            tmpC3 = tmpC3->next;
-        if(tmpC4!=NULL)
-            tmpC4 = tmpC4->next;
-        if(tmpC5!=NULL)
-            tmpC5 = tmpC5->next;
-        if(tmpC6!=NULL)
-            tmpC6 = tmpC6->next;
-        if(tmpC7!=NULL)
-            tmpC7 = tmpC7->next;
+    }
+    else
+    {
+        printRight();
     }
 
     // the 3 bottom lines of the screen
@@ -974,7 +981,7 @@ bool checkIfFieldFromHasAce(char fieldFrom, Board *board);
 
 Card *removeLastCardFromField(char fieldFrom, Board *board);
 
-isValidMove(char move[6], Board * board){
+bool isValidMove(char move[6], Board * board){
     char * from = strtok(move, "->");
     char * to = strtok(NULL, "->");
 
@@ -1491,6 +1498,7 @@ void gameLoop()
     bool running = true;
 
     char message[100]; // the message showed on the screen
+    char lastCommand[100]; // the last entered command
     char phase[100]; // the game phase (STARTUP, PLAY, ____)
     strcpy(phase, "STARTUP");
 
@@ -1502,17 +1510,17 @@ void gameLoop()
 
     Card *deck = NULL;
     Board *board = NULL;
-    deck = ld("cardDeck");
 
-    // sd(deck, "batman");
+
+    //sd(deck, "batman");
 
     // TODO: move these functions around
-    board = prepareBoard(deck);
-    sw(board, "SW", "OK",false);
-    deck = unPrepareBoard(board);
-    sr(deck,52);
-    board = prepareBoard(deck);
-    sw(board, "SW", "OK",false);
+//    board = prepareBoard(deck);
+//    sw(board, "SW", "OK",false);
+//    deck = unPrepareBoard(board);
+//    sr(deck,52);
+//    board = prepareBoard(deck);
+//    sw(board, "SW", "OK",false);
 
 
     // the endless game loop
@@ -1520,6 +1528,7 @@ void gameLoop()
 
     {
         // 00 - print to the screen / render
+        sw(board, lastCommand, message, false);
 
         // 01 - check if the game is done
 
@@ -1543,11 +1552,30 @@ void gameLoop()
         {
             // 04 - do command, if any
             if(strcmp(userInput, "SW") == 0 && strcmp(phase, "STARTUP") == 0) // #2
-            {}
+            {
+                if(board == NULL){
+                    strcpy(lastCommand, "SW");
+                    strcpy(message, "error: no deck");
+                }
+                else{
+                    strcpy(lastCommand, "SW");
+                    sw(board, lastCommand, "OK", true);
+                }
+            }
             else if(strcmp(userInput, "SR") == 0 && strcmp(phase, "STARTUP") == 0) // #4
-            {}
+            {
+                if(deck == NULL){
+                    strcpy(lastCommand, "SR");
+                    strcpy(message, "error: no deck");
+                }
+                else{
+                    strcpy(lastCommand, "SR");
+                    sr(deck, 52);
+                }
+            }
             else if(strcmp(userInput, "QQ") == 0 && strcmp(phase, "STARTUP") == 0) // #6
             {
+                strcpy(lastCommand, "QQ");
                 printf("\n");
                 printf("the program has stop and will be killed in 3 seconds");
                 sleep(3);
@@ -1572,7 +1600,7 @@ void gameLoop()
             }
             else if(strcmp(userInput, "SI") == 0 && strcmp(phase, "STARTUP") == 0) // #3 - if the user didn't set the second parameter
             {
-                sd(deck, "");
+
             }
             else
             {
@@ -1586,7 +1614,25 @@ void gameLoop()
 
             if(strcmp(userInput[0], "L") == 0 && strcmp(userInput[1], "D") == 0
             && strcmp(userInput[2], " ") == 0 && strcmp(phase, "STARTUP") == 0) // #1 - LD <filename>
-            {}
+            {
+                char temp = strtok(userInput, " ");
+                char filename = strtok(NULL, " ");
+
+                FILE *fp = fopen(filename, "r");
+
+                if(fp != NULL) // the file does not exit
+                {
+                    strcpy(message, "error: file does not exit");
+                }
+                else
+                {
+                    fclose(fp);
+                    deck = ld(filename);
+                    strcpy(message, "OK");
+                }
+
+                fclose(fp);
+            }
             else if(strcmp(userInput[0], "S") == 0 && strcmp(userInput[1], "I") == 0
             && strcmp(userInput[2], " ") == 0 && strcmp(phase, "STARTUP") == 0) // #3 - SI <split>
             {}
@@ -1594,7 +1640,9 @@ void gameLoop()
             && strcmp(userInput[2], " ") == 0  && strcmp(phase, "STARTUP") == 0) // #5 - SD <filename>
             {
                 //TODO: check if there is a better way to do this
-                char * fname = strtok(userInput, " ");
+                char temp = strtok(userInput, " ");
+                char * fname = strtok(NULL, " ");
+
                 sd(deck, fname);
             }
             else if(strcmp(userInput[0], "L") == 0 && strcmp(userInput[1], " ") == 0 && strcmp(phase, "STARTUP") == 0) // #13 - L <filename>
@@ -1609,27 +1657,19 @@ void gameLoop()
             // <Game Moves> | <from>-><to>  |
             else if(strstr(userInput, "->")) // #9
             {
+                // check if the move is valid
+                bool valid = isValidMove(userInput, board);
 
-                //C6:4H->C4
-                //C6:4H->F4
-                //C6->C4
-
-                //F4->C4
-                //C6->F4
-                //F4->C6
-
-                //F4->F3
-
-                // validation 1
-                // check if suit moved to is black (S,C) if the card moved is (H,D)
-                // check if suit moved to is red (H,D) if the card moved is (S,C)
-
-                // validation 2
-                // check if the number moved to, is one higher than the card moved
-
-                // validation 3 - could be moved somewhere else
-                // check if the column is full | this one deck/column is done !
-
+                if(valid) // if valid move, then do the move
+                {
+                    strcpy(lastCommand, userInput);
+                    strcpy(message, "OK");
+                }
+                else
+                {
+                    strcmp(lastCommand, userInput);
+                    strcpy(message, "error: not valid move");
+                }
             }
             else
             {
@@ -1638,9 +1678,11 @@ void gameLoop()
         }
 
         // if the code have gotten down to here, we can assume that a command have been run
-        // TODO: check if this works
+        // TODO: change this so it works with undo, save, redo, osv.
         strcpy(commandList[clIndex], userInput);
         clIndex++;
+
+
     }
 }
 
@@ -1648,16 +1690,12 @@ int main() {
     //char stdDeck[52][2];
     //strncpy(stdDeck,standardDeck,104);
     //shuffle(stdDeck,52,2);
-    Card *deck = NULL;
-    Board *board = NULL;
-    deck = ld("cardDeck");
-    
-    // sd(deck, "batman");
-
-    // board = prepareBoard(deck);
-    // sw(board, "SW", "OK");
-    board = prepareBoard(deck);
-    sw(board, "SW", "OK",false);
+//    Card *deck = NULL;
+//    Board *board = NULL;
+//    deck = ld("cardDeck");
+//
+//    board = prepareBoard(deck);
+//    sw(board, "SW", "OK",false);
     //deck = unPrepareBoard(board);
     //sr(deck,52);
     //board = prepareBoard(deck);
@@ -1666,141 +1704,25 @@ int main() {
     // char testing[100];
     // scanf("%s", testing);
     //printf("Hello, World!\n");
-    //gameLoop();
-    char tmpArr[] = "C7->F2";
+    gameLoop();
 
-    bool test = isValidMove(tmpArr,board);
+    // region new test stuff
 
-    char tmpArr2[] = "C1->C2";
+    // char tmpArr[] = "C7->F2";
 
-    test = isValidMove(tmpArr2,board);
+    // bool test = isValidMove(tmpArr,board);
 
-    char tmpArr3[] = "C5:7S->C2:8H";
+    // char tmpArr2[] = "C1->C2";
 
-    test = isValidMove(tmpArr3,board);
+    // test = isValidMove(tmpArr2,board);
 
-    sw(board, "SW", "OK",false);
+    // char tmpArr3[] = "C5:7S->C2:8H";
 
+    // test = isValidMove(tmpArr3,board);
 
-    //char testing[100];
-    //scanf("%s", testing);
-
-    // region stuff
-
-    /*Card *card = NULL;
-    card = deck;
-    while(card!=NULL){
-        printf("%c%c\n",card->value,card->suit);
-        card = card->next;
-    }*/
-    //Card *newCard = NULL;
-
-    //newCard = CreateCard('A','S',"C1",NULL,true);
-
-    //printf("Successful add of flight %c",newCard->value);
-    /*int count=0;
-    for(int i = 0; i<52; i++){
-        for(int j = 0; j<2; j++){
-            printf("%c",stdDeck[i][j]);
-        }
-        //printf(" %d", count);
-        count++;
-        printf("\n");
-    }*/
-
-    /*printf("%s\t%s\t%s\t%s\n","value","Column","Field","Visible");
-
-
-    for(int i = 0; i<52; i++){
-        if(i==0){
-            printf("%c%c",stdDeck[i][0],stdDeck[i][1]);
-            printf("\t%s","C1");
-            printf("\t%s","NULL");
-            printf("\t%s\n","true");
-        }
-        if(i>0 && i<7){
-            if(i==1){
-                printf("%c%c",stdDeck[i][0],stdDeck[i][1]);
-                printf("\t%s","C2");
-                printf("\t%s","NULL");
-                printf("\t%s\n","false");
-            }else{
-                printf("%c%c",stdDeck[i][0],stdDeck[i][1]);
-                printf("\t%s","C2");
-                printf("\t%s","NULL");
-                printf("\t%s\n","true");
-            }
-        }
-        if(i>6 && i<14){
-            if(i<9){
-                printf("%c%c",stdDeck[i][0],stdDeck[i][1]);
-                printf("\t%s","C3");
-                printf("\t%s","NULL");
-                printf("\t%s\n","false");
-            }else{
-                printf("%c%c",stdDeck[i][0],stdDeck[i][1]);
-                printf("\t%s","C3");
-                printf("\t%s","NULL");
-                printf("\t%s\n","true");
-            }
-        }
-        if(i>13 && i<22){
-            if(i<17){
-                printf("%c%c",stdDeck[i][0],stdDeck[i][1]);
-                printf("\t%s","C4");
-                printf("\t%s","NULL");
-                printf("\t%s\n","false");
-            }else{
-                printf("%c%c",stdDeck[i][0],stdDeck[i][1]);
-                printf("\t%s","C4");
-                printf("\t%s","NULL");
-                printf("\t%s\n","true");
-            }
-        }
-        if(i>21 && i<31){
-            if(i<26){
-                printf("%c%c",stdDeck[i][0],stdDeck[i][1]);
-                printf("\t%s","C5");
-                printf("\t%s","NULL");
-                printf("\t%s\n","false");
-            }else{
-                printf("%c%c",stdDeck[i][0],stdDeck[i][1]);
-                printf("\t%s","C5");
-                printf("\t%s","NULL");
-                printf("\t%s\n","true");
-            }
-        }
-        if(i>30 && i<41){
-            if(i<36){
-                printf("%c%c",stdDeck[i][0],stdDeck[i][1]);
-                printf("\t%s","C6");
-                printf("\t%s","NULL");
-                printf("\t%s\n","false");
-            }else{
-                printf("%c%c",stdDeck[i][0],stdDeck[i][1]);
-                printf("\t%s","C6");
-                printf("\t%s","NULL");
-                printf("\t%s\n","true");
-            }
-        }
-        if(i>40 && i<52){
-            if(i<47){
-                printf("%c%c",stdDeck[i][0],stdDeck[i][1]);
-                printf("\t%s","C7");
-                printf("\t%s","NULL");
-                printf("\t%s\n","false");
-            }else{
-                printf("%c%c",stdDeck[i][0],stdDeck[i][1]);
-                printf("\t%s","C7");
-                printf("\t%s","NULL");
-                printf("\t%s\n","true");
-            }
-        }
-    }*/
-
+    // sw(board, "SW", "OK",true);
 
     // endregion
-
 
     return 0;
 }
