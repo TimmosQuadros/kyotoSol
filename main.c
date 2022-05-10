@@ -966,6 +966,8 @@ Card * findCard(Board * board, int column, char value, char suit);
 
 Card * findCardB4(Board *pBoard, int column, char value, char suit);
 
+Card * getFieldCard(char field, Board *board);
+
 isValidMove(char move[6], Board * board){
     char * from = strtok(move, "->");
     char * to = strtok(NULL, "->");
@@ -1034,6 +1036,18 @@ isValidMove(char move[6], Board * board){
     }else if(fieldFrom!=NULL && fieldTo==NULL){
         if(cardTo!=NULL && columnTo!=NULL){
             //field to column card i.e. F1->C1:AS
+            int column = (int)columnTo[1]-48;
+            if(column==1 || column==2 || column==3 || column==4 || column==5 || column==6 || column==7) {
+                Card * lastCardTo = getLastCardFromColumn(board, column);
+                //Check if cardTo is the last Card as you cannot move a field-card to the middle of a column
+                if ((char) cardTo[0] == lastCardTo->value && (char) cardTo[1] == lastCardTo->suit) {
+                    Card * fieldCard = getFieldCard(fieldFrom[1],board);
+                    if(checkIfCardFitOnCard(fieldCard,lastCardTo)){
+                        fieldCard->next=NULL;
+                        lastCardTo->next=fieldCard;
+                    }
+                }
+            }
 
         }else if(cardTo==NULL && columnTo!=NULL){
             //field to column i.e. F1->C1
@@ -1152,6 +1166,18 @@ isValidMove(char move[6], Board * board){
         return false;
     }
     return false;
+}
+
+Card * getFieldCard(char field, Board *board) {
+    if(field=='1'){
+        return &board->f1.cards;
+    }else if(field=='2'){
+        return &board->f2.cards;
+    }else if(field=='3'){
+        return &board->f3.cards;
+    }else if(field=='4'){
+        return &board->f4.cards;
+    }
 }
 
 Card * findCardB4(Board *board, int column, char value, char suit) {
