@@ -338,14 +338,15 @@ bool checkFile(char filename[]){
 
     if(fp == NULL) // the file does not exit
     {
+        fclose(fp);
         return false;
     }
     else
     {
+        fclose(fp);
         return true;
     }
 
-    fclose(fp);
 }
 
 bool containsTxt(char filename[]){
@@ -357,7 +358,7 @@ bool containsTxt(char filename[]){
 }
 
 Card * ld(char filename[]){
-    FILE *fp;
+    FILE *fp = NULL;
     char row[1000];
     char *token;
     char filenameTmp[40];
@@ -398,7 +399,7 @@ Card * ld(char filename[]){
         strcpy(temp, filename);
         strcat(temp, ".txt");
 
-        fp = fopen(temp, "w");
+        fp = fopen(temp, "r");
     }
 
     Card *newCard = NULL;
@@ -428,6 +429,8 @@ Card * ld(char filename[]){
         }
 
     }
+    fclose(fp);
+    fp=NULL;
     return linked_list;
 }
 
@@ -1608,7 +1611,7 @@ void gameLoop()
                 if(checkFile("cardDeck.txt")){
                     strcpy(lastCommand, "LD");
                     strcpy(message, "OK");
-                    deck = ld("cardDeck");
+                    deck = ld("cardDeck.txt");
                     board = prepareBoard(deck);
                 }
                 else
