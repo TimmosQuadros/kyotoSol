@@ -968,6 +968,12 @@ Card * findCardB4(Board *pBoard, int column, char value, char suit);
 
 Card * getFieldCard(char field, Board *board);
 
+bool checkIfFieldToIsEmpty(char fieldTo, Board *board);
+
+bool checkIfFieldFromHasAce(char fieldFrom, Board *board);
+
+Card *removeLastCardFromField(char fieldFrom, Board *board);
+
 isValidMove(char move[6], Board * board){
     char * from = strtok(move, "->");
     char * to = strtok(NULL, "->");
@@ -1067,6 +1073,23 @@ isValidMove(char move[6], Board * board){
         }
     }else if(fieldFrom!=NULL && fieldTo!=NULL){
         //Field to Field i.e. F1->F2
+        if(checkIfFieldToIsEmpty(fieldTo[1],board)){
+            if(checkIfFieldFromHasAce(fieldFrom[1],board)){
+                Card *fieldCard = removeLastCardFromField(fieldFrom[1],board);
+                if(fieldCard!=NULL){
+                    if(fieldTo[1]=='1'){
+                        board->f1.cards=*fieldCard;
+                    }else if(fieldTo[1]=='2'){
+                        board->f2.cards=*fieldCard;
+                    }else if(fieldTo[1]=='3'){
+                        board->f3.cards=*fieldCard;
+                    }else if(fieldTo[1]=='4'){
+                        board->f4.cards=*fieldCard;
+                    }
+                    return true;
+                }
+            }
+        }
 
     }else if(fieldFrom==NULL && fieldTo==NULL){
         if(cardFrom==NULL && columnFrom!=NULL){
@@ -1176,6 +1199,67 @@ isValidMove(char move[6], Board * board){
         }
     }else{
         return false;
+    }
+    return false;
+}
+
+Card *removeLastCardFromField(char fieldFrom, Board *board) {
+    Card * returnCard = NULL;
+    Field emptyField = {NULL,NULL};
+    if(fieldFrom=='1'){
+        returnCard = CreateCard(board->f1.cards.value,board->f1.cards.suit,board->f1.cards.visible);
+        board->f1=emptyField;
+    }else if(fieldFrom=='2'){
+        returnCard = CreateCard(board->f2.cards.value,board->f2.cards.suit,board->f2.cards.visible);
+        board->f2=emptyField;
+    }else if(fieldFrom=='3'){
+        returnCard = CreateCard(board->f3.cards.value,board->f3.cards.suit,board->f3.cards.visible);
+        board->f3=emptyField;
+    }else if(fieldFrom=='4'){
+        returnCard = CreateCard(board->f4.cards.value,board->f4.cards.suit,board->f4.cards.visible);
+        board->f4=emptyField;
+    }
+    return returnCard;
+}
+
+bool checkIfFieldFromHasAce(char fieldFrom, Board *board) {
+    if(fieldFrom=='1'){
+        if(board->f1.cards.value=='A' && board->f1.cards.next==NULL){
+            return true;
+        }
+    }else if(fieldFrom=='2'){
+        if(board->f2.cards.value=='A' && board->f2.cards.next==NULL){
+            return true;
+        }
+    }else if(fieldFrom=='3'){
+        if(board->f3.cards.value=='A' && board->f3.cards.next==NULL){
+            return true;
+        }
+    }else if(fieldFrom=='4'){
+        if(board->f4.cards.value=='A' && board->f4.cards.next==NULL){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool checkIfFieldToIsEmpty(char fieldTo, Board *board) {
+    if(fieldTo=='1'){
+        if(board->f1.cards.value==NULL){
+            return true;
+        }
+    }else if(fieldTo=='2'){
+        if(board->f2.cards.value==NULL){
+            return true;
+        }
+    }else if(fieldTo=='3'){
+        if(board->f3.cards.value==NULL){
+            return true;
+        }
+    }else if(fieldTo=='4'){
+        if(board->f4.cards.value==NULL){
+            return true;
+        }
     }
     return false;
 }
