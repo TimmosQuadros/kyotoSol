@@ -1708,8 +1708,9 @@ void gameLoop()
 
                 strcpy(lastCommand, userInput);
                 strcpy(message, "OK");
-
+                unPrepareBoard(board);
                 sd(deck, fname);
+                board = prepareBoard(deck);
             }
             else if(userInput[0] == 'L' && strlen(userInput) > 2 && strcmp(phase, "STARTUP") == 0) // #13 - L <filename>
             {
