@@ -1533,9 +1533,8 @@ void gameLoop()
         // 01 - check if the game is done
 
         // 02 - ask for command input
-        char userInput [100];
-        scanf("%100s", &userInput);
-        printf("\n %s \n", userInput);
+        char * userInput[100];
+        fgets(userInput, 100, stdin);
 
         // 03 - validation for input
         // no
