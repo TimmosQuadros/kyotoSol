@@ -1655,7 +1655,7 @@ void gameLoop()
         }
         else // hard commands
         {
-            printf("\n hard commands ---- % \n", strlen(userInput));
+            // printf("\n hard commands ---- % \n", strlen(userInput));
 
             // hard commands: LD <filename>, SI <split>, SD <filename>, L <filename>, S <filename>
             // 04 - do command, if any
@@ -1663,8 +1663,8 @@ void gameLoop()
             if(userInput[0] == 'L' && userInput[1] == 'D'
             && strlen(userInput) > 2 && strcmp(phase, "STARTUP") == 0) // #1 - LD <filename>
             {
-                char temp = strtok(userInput, " ");
-                char filename = strtok(NULL, " ");
+                char * temp = strtok(userInput, " ");
+                char * filename = strtok(NULL, " ");
 
                 printf("\n temp LD <filename> %s \n", temp);
                 printf("\n fname LD <filename> %s \n", filename);
