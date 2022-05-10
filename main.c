@@ -748,7 +748,7 @@ void sd(Deck * deck, char * filename){
     }
 
     // int length = getCount(deck);
-    Card * current = & deck->cards;
+    Card * current = &deck->cards;
 
     while(current != NULL)
     {
@@ -1729,7 +1729,7 @@ void gameLoop()
                     fp = fopen(filename,"r");
                 }
                 else{
-                    char * temp2;
+                    char * temp2 = malloc(sizeof(char[100]));
                     strcpy(temp2, filename);
                     strcat(temp2, ".txt");
 
