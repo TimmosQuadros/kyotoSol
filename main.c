@@ -1718,15 +1718,27 @@ void gameLoop()
                 char * temp = strtok(userInput, " ");
                 char * filename = strtok(NULL, " ");
 
-                printf("\n temp LD <filename> %s \n", temp);
-                printf("\n fname LD <filename> %s \n", filename);
-
                 bool txt = containsTxt(filename);
 
                 FILE *fp = NULL;
 
                 if(txt){
-                    fp = fopen(filename,"r");
+                    fp = fopen(filename, "r");
+
+                    if(fp == NULL) // the file does not exit
+                    {
+                        strcpy(lastCommand, userInput);
+                        strcpy(message, "error: file does not exit");
+                    }
+                    else
+                    {
+                        strcpy(lastCommand, userInput);
+                        deck = ld(filename);
+                        board = prepareBoard(deck);
+                        strcpy(message, "OK");
+                    }
+
+                    fclose(fp);
                 }
                 else{
                     char * temp2 = malloc(sizeof(char[100]));
@@ -1734,24 +1746,23 @@ void gameLoop()
                     strcat(temp2, ".txt");
 
                     fp = fopen(temp2, "r");
-                }
+
+                    if(fp == NULL) // the file does not exit
+                    {
+                        strcpy(lastCommand, userInput);
+                        strcpy(message, "error: file does not exit");
+                    }
+                    else
+                    {
+                        strcpy(lastCommand, userInput);
+                        deck = ld(filename);
+                        board = prepareBoard(deck);
+                        strcpy(message, "OK");
+                    }
 
 
-
-                if(fp == NULL) // the file does not exit
-                {
-                    strcpy(lastCommand, userInput);
-                    strcpy(message, "error: file does not exit");
-                }
-                else
-                {
-                    strcpy(lastCommand, userInput);
                     fclose(fp);
-                    deck = ld(filename);
-                    strcpy(message, "OK");
                 }
-
-                fclose(fp);
             }
             else if(userInput[0] == 'S' && userInput[1] == 'I'
             && strlen(userInput) > 2 && strcmp(phase, "STARTUP") == 0) // #3 - SI <split>
