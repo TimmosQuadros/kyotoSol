@@ -1755,7 +1755,7 @@ void gameLoop()
                     else
                     {
                         strcpy(lastCommand, userInput);
-                        deck = ld(filename);
+                        deck = ld(temp2);
                         board = prepareBoard(deck);
                         strcpy(message, "OK");
                     }
