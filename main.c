@@ -1635,7 +1635,7 @@ void gameLoop()
             // hard commands: LD <filename>, SI <split>, SD <filename>, L <filename>, S <filename>
             // 04 - do command, if any
 
-            if(strcmp(userInput[0], "L") == 0 && strcmp(userInput[1], "D") == 0
+            if(strcmp(&userInput[0], "L") == 0 && strcmp(&userInput[1], "D") == 0
             && userInput > 2 && strcmp(phase, "STARTUP") == 0) // #1 - LD <filename>
             {
                 char temp = strtok(userInput, " ");
@@ -1659,7 +1659,7 @@ void gameLoop()
 
                 fclose(fp);
             }
-            else if(strcmp(userInput[0], "S") == 0 && strcmp(userInput[1], "I") == 0
+            else if(strcmp(&userInput[0], "S") == 0 && strcmp(&userInput[1], "I") == 0
             && userInput > 2 && strcmp(phase, "STARTUP") == 0) // #3 - SI <split>
             {
                 // TODO: make SI <split> to work
@@ -1667,7 +1667,7 @@ void gameLoop()
                 strcpy(message, "OK");
                 // si();
             }
-            else if(strcmp(userInput[0], "S") == 0 && strcmp(userInput[1], "D") == 0
+            else if(strcmp(&userInput[0], "S") == 0 && strcmp(&userInput[1], "D") == 0
             && userInput > 2 && strcmp(phase, "STARTUP") == 0) // #5 - SD <filename>
             {
                 //TODO: check if there is a better way to do this
@@ -1679,13 +1679,13 @@ void gameLoop()
 
                 sd(deck, fname);
             }
-            else if(strcmp(userInput[0], "L") == 0 && userInput > 2 && strcmp(phase, "STARTUP") == 0) // #13 - L <filename>
+            else if(strcmp(&userInput[0], "L") == 0 && userInput > 2 && strcmp(phase, "STARTUP") == 0) // #13 - L <filename>
             {
                 // TODO: read the pdf, to check which state we need to be in
                 strcpy(lastCommand, userInput);
                 strcpy(message, "OK");
             }
-            else if(strcmp(userInput[0], "S") == 0 && userInput > 2 && strcmp(phase, "PLAY") == 0) // #12 - S <filename>
+            else if(strcmp(&userInput[0], "S") == 0 && userInput > 2 && strcmp(phase, "PLAY") == 0) // #12 - S <filename>
             {
                 // TODO: read the pdf, to check which state we need to be in
                 strcpy(lastCommand, userInput);
