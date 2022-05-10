@@ -1767,8 +1767,6 @@ void gameLoop()
             else if(userInput[0] == 'S' && userInput[1] == 'I'
             && strlen(userInput) > 2 && strcmp(phase, "STARTUP") == 0) // #3 - SI <split>
             {
-                printf("\n SI <split> %s \n", userInput);
-
                 // TODO: make SI <split> to work
                 strcpy(lastCommand, userInput);
                 strcpy(message, "OK");
@@ -1781,9 +1779,6 @@ void gameLoop()
                 char * temp = strtok(userInput, " ");
                 char * fname = strtok(NULL, " ");
 
-                printf("\n temp SD <filename> %s \n", temp);
-                printf("\n fname SD <filename> %s \n", fname);
-
                 strcpy(lastCommand, userInput);
                 strcpy(message, "OK");
                 unPrepareBoard(board);
@@ -1794,15 +1789,11 @@ void gameLoop()
             {
                 // TODO: read the pdf, to check which state we need to be in
 
-                printf("\n L <filename> %s \n", userInput);
-
                 strcpy(lastCommand, userInput);
                 strcpy(message, "not support");
             }
             else if(userInput[0] == 'S' && strlen(userInput) > 2 && strcmp(phase, "PLAY") == 0) // #12 - S <filename>
             {
-                printf("\n S <filename> %s \n", userInput);
-
                 // TODO: read the pdf, to check which state we need to be in
                 strcpy(lastCommand, userInput);
                 strcpy(message, "not support");
